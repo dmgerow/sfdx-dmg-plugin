@@ -1,17 +1,6 @@
 sfdx-dmg-plugin
 ===============
 
-
-
-[![Version](https://img.shields.io/npm/v/sfdx-dmg-plugin.svg)](https://npmjs.org/package/sfdx-dmg-plugin)
-[![CircleCI](https://circleci.com/gh/dmgerow/sfdx-dmg-plugin/tree/master.svg?style=shield)](https://circleci.com/gh/dmgerow/sfdx-dmg-plugin/tree/master)
-[![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/dmgerow/sfdx-dmg-plugin?branch=master&svg=true)](https://ci.appveyor.com/project/heroku/sfdx-dmg-plugin/branch/master)
-[![Codecov](https://codecov.io/gh/dmgerow/sfdx-dmg-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/dmgerow/sfdx-dmg-plugin)
-[![Greenkeeper](https://badges.greenkeeper.io/dmgerow/sfdx-dmg-plugin.svg)](https://greenkeeper.io/)
-[![Known Vulnerabilities](https://snyk.io/test/github/dmgerow/sfdx-dmg-plugin/badge.svg)](https://snyk.io/test/github/dmgerow/sfdx-dmg-plugin)
-[![Downloads/week](https://img.shields.io/npm/dw/sfdx-dmg-plugin.svg)](https://npmjs.org/package/sfdx-dmg-plugin)
-[![License](https://img.shields.io/npm/l/sfdx-dmg-plugin.svg)](https://github.com/dmgerow/sfdx-dmg-plugin/blob/master/package.json)
-
 <!-- toc -->
 * [Debugging your plugin](#debugging-your-plugin)
 <!-- tocstop -->
