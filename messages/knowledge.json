@@ -1,0 +1,9 @@
+{
+    "convert": {
+        "description": "convert a csv with rich text to html",
+        "flags": {
+            "source": "source file relative path",
+            "target": "target file relative path"
+        }
+    }
+}

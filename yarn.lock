@@ -2548,6 +2548,11 @@ package-hash@^3.0.0:
     lodash.flattendeep "^4.4.0"
     release-zalgo "^1.0.0"
 
+papaparse@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-5.0.2.tgz#447ef95a42015e0b0e52df717b44aedc78252dc9"
+  integrity sha512-FoaaFfNlCztJ7c+XD1Fgb0zIJ530HwSr6FBfM1mcMzLtIWoTxE5paBNJWiCWFjDrTzGiEG/uIUfqVzgKxqd+Sw==
+
 parse-json@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/parse-json/-/parse-json-4.0.0.tgz#be35f5425be1f7f6c747184f98a788cb99477ee0"
