@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from "@salesforce/command";
 import { Messages } from "@salesforce/core";
+import { join } from "path";
 import * as fs from "fs";
 import * as Papa from "papaparse";
 
@@ -52,22 +53,18 @@ export default class Base64Decode extends SfdxCommand {
             worker: true,
             header: true,
             step: function (result) {
-                console.log(result.data);
-                console.log(filenamecolumn);
-                // console.log(result.data[base64column]);
-                console.log(result.data[filenamecolumn]);
                 let buff = Buffer.from(result.data[base64column], 'base64');
-                fs.writeFileSync(target + result.data[filenamecolumn], buff);
-                // targetJson.meta = result.meta;
-                // let csvRow = result.data;
-                // csvRow[result.data[base64column]] = path;
-                // targetJson.data.push(csvRow);
+                fs.writeFileSync(join(target, "attachments", result.data[filenamecolumn]), buff);
+                targetJson.meta = result.meta;
+                let csvRow = result.data;
+                csvRow[base64column] = join("attachments", result.data[filenamecolumn]);
+                targetJson.data.push(csvRow);
                 count++;
             },
             complete: function (results, file) {
                 const targetCsv = Papa.unparse(targetJson);
-                fs.writeFileSync(target + "theCsv.csv", targetCsv);
-                console.log('parsing complete read', count, 'records.');
+                fs.writeFileSync(join(target, "files.csv"), targetCsv);
+                console.log('Processed', count, 'rows.');
             }
         });
         return;

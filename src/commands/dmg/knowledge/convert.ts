@@ -50,7 +50,7 @@ export default class KnowledgeConversion extends SfdxCommand {
             complete: function (results, file) {
                 const targetCsv = Papa.unparse(targetJson);
                 fs.writeFileSync(target, targetCsv);
-                console.log('parsing complete read', count, 'records.');
+                console.log('Processed', count, 'rows.');
             }
         });
         return;
