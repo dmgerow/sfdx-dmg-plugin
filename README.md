@@ -2,21 +2,6 @@ sfdx-dmg-plugin
 ===============
 
 <!-- toc -->
-* [Debugging your plugin](#debugging-your-plugin)
-<!-- tocstop -->
-<!-- install -->
-<!-- usage -->
-```sh-session
-$ npm install -g sfdx-dmg-plugin
-$ sfdx COMMAND
-running command...
-$ sfdx (-v|--version|version)
-sfdx-dmg-plugin/0.0.0 darwin-x64 node-v12.7.0
-$ sfdx --help [COMMAND]
-USAGE
-  $ sfdx COMMAND
-...
-```
 <!-- usagestop -->
 <!-- commands -->
 * [`sfdx dmg:connectedapp:create -n <string> [-l <string>] [-r] [-c <string>] [-d <string>] [-s <string>] [-e <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-dmgconnectedappcreate--n-string--l-string--r--c-string--d-string--s-string--e-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
