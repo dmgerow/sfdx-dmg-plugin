@@ -1,5 +1,6 @@
 import { flags, SfdxCommand } from "@salesforce/command";
 import { Messages } from "@salesforce/core";
+import { join } from "path";
 import * as fs from "fs";
 import * as Papa from "papaparse";
 
