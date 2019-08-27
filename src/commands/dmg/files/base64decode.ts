@@ -24,12 +24,24 @@ export default class Base64Decode extends SfdxCommand {
             char: "t",
             description: messages.getMessage("base64decode.flags.target"),
             required: true
+        }),
+        base64Column: flags.string({
+            char: "c",
+            description: messages.getMessage("base64decode.flags.base64Column"),
+            required: true
+        }),
+        fileNameColumn: flags.string({
+            char: "f",
+            description: messages.getMessage("base64decode.flags.fileNameColumn"),
+            required: true
         })
     };
 
     public async run(): Promise<any> {
         const source = this.flags.source;
         const target = this.flags.target;
+        const base64Column = this.flags.base64Column;
+        const fileNameColumn = this.flags.fileNameColumn;
         const sourceFile = fs.createReadStream(source);
         let count = 0;
         let targetJson = {
@@ -40,16 +52,17 @@ export default class Base64Decode extends SfdxCommand {
             worker: true,
             header: true,
             step: function (result) {
-                // console.log(result);
+                let buff = new Buffer(result[base64Column], 'base64');
+                fs.writeFileSync(target + result[fileNameColumn], buff);
                 targetJson.meta = result.meta;
                 let csvRow = result.data;
-                csvRow.Assigned = "Papa Parse";
+                csvRow[result[base64Column]] = target + result[fileNameColumn];
                 targetJson.data.push(csvRow);
                 count++;
             },
             complete: function (results, file) {
                 const targetCsv = Papa.unparse(targetJson);
-                fs.writeFileSync(target, targetCsv);
+                fs.writeFileSync(target + "theCsv.csv", targetCsv);
                 console.log('parsing complete read', count, 'records.');
             }
         });
