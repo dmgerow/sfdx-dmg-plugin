@@ -86,6 +86,14 @@ export default class ConnectedAppCreate extends SfdxCommand {
     const app = await this.createConnectedApp(metadata);
     set(app, "oauthConfig.consumerSecret", consumerSecret);
     this.ux.styledJSON(app);
+    if (createCerts) {
+      this.ux.log(
+        'Note: You will still need to set permitted users to "Admins Only" and assign the appropriate permission sets and profiles to the connected app before using.'
+      );
+      this.ux.log(
+        "Do not forget to upload your key to any appliations authenticating against this app."
+      );
+    }
     return app;
   }
 
