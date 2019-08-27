@@ -52,15 +52,16 @@ export default class Base64Decode extends SfdxCommand {
             worker: true,
             header: true,
             step: function (result) {
+                console.log(result.data);
                 console.log(filenamecolumn);
-                console.log(result.data[base64column]);
-                console.log(target + result.data[filenamecolumn]);
+                // console.log(result.data[base64column]);
+                console.log(result.data[filenamecolumn]);
                 let buff = Buffer.from(result.data[base64column], 'base64');
                 fs.writeFileSync(target + result.data[filenamecolumn], buff);
-                targetJson.meta = result.meta;
-                let csvRow = result.data;
-                csvRow[result.data[base64column]] = target + result.data[filenamecolumn];
-                targetJson.data.push(csvRow);
+                // targetJson.meta = result.meta;
+                // let csvRow = result.data;
+                // csvRow[result.data[base64column]] = path;
+                // targetJson.data.push(csvRow);
                 count++;
             },
             complete: function (results, file) {
