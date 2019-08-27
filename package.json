@@ -12,7 +12,8 @@
     "node-forge": "^0.8.5",
     "open": "^6.4.0",
     "papaparse": "^5.0.2",
-    "tslib": "^1"
+    "tslib": "^1",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
