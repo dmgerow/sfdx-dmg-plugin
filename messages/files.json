@@ -4,8 +4,8 @@
         "flags": {
             "source": "source file relative path",
             "target": "target file relative path",
-            "base64Column": "column header with base64 data in it",
-            "fileNameColumn": "column header with file name in it"
+            "base64column": "column header with base64 data in it",
+            "filenamecolumn": "column header with file name in it"
         }
     }
 }

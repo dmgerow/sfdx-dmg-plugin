@@ -25,14 +25,14 @@ export default class Base64Decode extends SfdxCommand {
             description: messages.getMessage("base64decode.flags.target"),
             required: true
         }),
-        base64Column: flags.string({
+        base64column: flags.string({
             char: "c",
-            description: messages.getMessage("base64decode.flags.base64Column"),
+            description: messages.getMessage("base64decode.flags.base64column"),
             required: true
         }),
-        fileNameColumn: flags.string({
+        filenamecolumn: flags.string({
             char: "f",
-            description: messages.getMessage("base64decode.flags.fileNameColumn"),
+            description: messages.getMessage("base64decode.flags.filenamecolumn"),
             required: true
         })
     };
@@ -40,8 +40,8 @@ export default class Base64Decode extends SfdxCommand {
     public async run(): Promise<any> {
         const source = this.flags.source;
         const target = this.flags.target;
-        const base64Column = this.flags.base64Column;
-        const fileNameColumn = this.flags.fileNameColumn;
+        const base64column = this.flags.base64column;
+        const filenamecolumn = this.flags.filenamecolumn;
         const sourceFile = fs.createReadStream(source);
         let count = 0;
         let targetJson = {
@@ -52,11 +52,14 @@ export default class Base64Decode extends SfdxCommand {
             worker: true,
             header: true,
             step: function (result) {
-                let buff = new Buffer(result[base64Column], 'base64');
-                fs.writeFileSync(target + result[fileNameColumn], buff);
+                console.log(filenamecolumn);
+                console.log(result.data[base64column]);
+                console.log(target + result.data[filenamecolumn]);
+                let buff = Buffer.from(result.data[base64column], 'base64');
+                fs.writeFileSync(target + result.data[filenamecolumn], buff);
                 targetJson.meta = result.meta;
                 let csvRow = result.data;
-                csvRow[result[base64Column]] = target + result[fileNameColumn];
+                csvRow[result.data[base64column]] = target + result.data[filenamecolumn];
                 targetJson.data.push(csvRow);
                 count++;
             },
