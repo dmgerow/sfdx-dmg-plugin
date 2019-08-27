@@ -49,6 +49,7 @@ export default class Base64Decode extends SfdxCommand {
             meta: {},
             data: []
         };
+        await fs.promises.mkdir(join(target, "attachments"), { recursive: true });
         Papa.parse(sourceFile, {
             worker: true,
             header: true,
