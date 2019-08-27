@@ -1,0 +1,14 @@
+{
+  "create": {
+    "description": "create a connected app in your org",
+    "flags": {
+      "name": "connected app name",
+      "label": "connected app label",
+      "certificate": "create and register a certificate",
+      "callbackurl": "callbackUrl (default is \"sfdx://success\")",
+      "description": "connected app description",
+      "scopes": "scopes separated by commas (defaut: Basic, Api, Web, RefreshToken; valid: Basic, Api, Web, Full, Chatter, CustomApplications, RefreshToken, OpenID, CustomPermissions, Wave, Eclair)",
+      "contactemail": "connected app contact email"
+    }
+  }
+}
