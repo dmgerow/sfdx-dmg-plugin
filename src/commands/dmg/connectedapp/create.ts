@@ -1,3 +1,4 @@
+// Credit sfdx-waw-plugin for base code https://github.com/wadewegner/sfdx-waw-plugin
 import { flags, SfdxCommand } from "@salesforce/command";
 import { Messages } from "@salesforce/core";
 import { set } from "@salesforce/kit";

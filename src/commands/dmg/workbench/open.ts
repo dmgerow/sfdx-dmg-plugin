@@ -1,3 +1,4 @@
+// Credit sfdx-waw-plugin for base code https://github.com/wadewegner/sfdx-waw-plugin
 import { flags, SfdxCommand } from "@salesforce/command";
 import { Global, Messages, SfdxError } from "@salesforce/core";
 import { JsonMap } from "@salesforce/ts-types";

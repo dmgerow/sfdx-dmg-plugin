@@ -1,3 +1,4 @@
+// Credit sfdx-waw-plugin for base code https://github.com/wadewegner/sfdx-waw-plugin
 export function getSelfSignedCertificate(pki, keys) {
   const cert = pki.createCertificate();
   cert.publicKey = keys.publicKey;

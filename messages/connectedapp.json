@@ -1,6 +1,6 @@
 {
   "create": {
-    "description": "create a connected app in your org",
+    "description": "create a connected app in your org. Credit sfdx-waw-plugin for base code https://github.com/wadewegner/sfdx-waw-plugin",
     "flags": {
       "name": "connected app name",
       "label": "connected app label",

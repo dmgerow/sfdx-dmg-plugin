@@ -1,6 +1,6 @@
 {
   "open": {
-    "description": "open workbench using the current target username (from waw plugin)",
+    "description": "open workbench using the current target username (from waw plugin). Credit sfdx-waw-plugin for base code https://github.com/wadewegner/sfdx-waw-plugin",
     "flags": {
       "targetworkbenchurl": "target workbench url",
       "setdefaultworkbenchurl": "store the workbench url as default",
