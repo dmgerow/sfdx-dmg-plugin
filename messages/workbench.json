@@ -1,0 +1,10 @@
+{
+  "open": {
+    "description": "open workbench using the current target username (from waw plugin)",
+    "flags": {
+      "targetworkbenchurl": "target workbench url",
+      "setdefaultworkbenchurl": "store the workbench url as default",
+      "urlonly": "urlonly"
+    }
+  }
+}
