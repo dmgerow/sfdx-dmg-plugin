@@ -22,7 +22,7 @@ $ npm install -g sfdx-dmg-plugin
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-sfdx-dmg-plugin/0.0.0 darwin-x64 node-v12.7.0
+sfdx-dmg-plugin/0.0.1 darwin-x64 node-v12.7.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -79,7 +79,7 @@ OPTIONS
       [default: warn] logging level for this command invocation
 ```
 
-_See code: [lib/commands/dmg/connectedapp/create.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.0/lib/commands/dmg/connectedapp/create.js)_
+_See code: [lib/commands/dmg/connectedapp/create.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.1/lib/commands/dmg/connectedapp/create.js)_
 
 ## `sfdx dmg:workbench:open [-s <string> -t <string>] [-r <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -107,7 +107,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/dmg/workbench/open.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.0/lib/commands/dmg/workbench/open.js)_
+_See code: [lib/commands/dmg/workbench/open.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.1/lib/commands/dmg/workbench/open.js)_
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
 # Debugging your plugin
