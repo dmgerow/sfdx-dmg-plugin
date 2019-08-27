@@ -1,0 +1,8 @@
+{
+    "deploy": {
+        "description": "deploy only what you mean to deploy",
+        "flags": {
+            "manifest": "path to the package.xml"
+        }
+    }
+}
