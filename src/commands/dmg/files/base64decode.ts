@@ -54,8 +54,7 @@ export default class Base64Decode extends SfdxCommand {
             worker: true,
             header: true,
             step: function (result) {
-                let buff = Buffer.from(result.data[base64column], 'base64');
-                fs.writeFileSync(join(target, "attachments", result.data[filenamecolumn]), buff);
+                fs.writeFileSync(join(target, "attachments", result.data[filenamecolumn]), result.data[base64column], 'base64');
                 targetJson.meta = result.meta;
                 let csvRow = result.data;
                 csvRow[base64column] = join("attachments", result.data[filenamecolumn]);

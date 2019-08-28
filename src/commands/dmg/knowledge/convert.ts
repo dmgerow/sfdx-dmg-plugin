@@ -74,8 +74,7 @@ export default class KnowledgeConversion extends SfdxCommand {
                     }
                 });
                 if (filenamecolumn && base64column && result.data[base64column] && result.data[filenamecolumn]) {
-                    let buff = Buffer.from(result.data[base64column], 'base64');
-                    fs.writeFileSync(join(target, "attachments", result.data[filenamecolumn]), buff);
+                    fs.writeFileSync(join(target, "attachments", result.data[filenamecolumn]), result.data[base64column], 'base64');
                     csvRow[base64column] = join("attachments", result.data[filenamecolumn]);
                 }
                 targetJson.data.push(csvRow);
