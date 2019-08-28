@@ -67,7 +67,7 @@ OPTIONS
       [default: warn] logging level for this command invocation
 ```
 
-_See code: [lib/commands/dmg/connectedapp/create.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.3/lib/commands/dmg/connectedapp/create.js)_
+_See code: [lib/commands/dmg/connectedapp/create.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.4/lib/commands/dmg/connectedapp/create.js)_
 
 ## `sfdx dmg:files:base64decode -s <string> -t <string> -c <string> -f <string> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -95,7 +95,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/dmg/files/base64decode.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.3/lib/commands/dmg/files/base64decode.js)_
+_See code: [lib/commands/dmg/files/base64decode.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.4/lib/commands/dmg/files/base64decode.js)_
 
 ## `sfdx dmg:knowledge:convert -s <string> -t <string> [-h <string>] [-f <string>] [-c <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -123,7 +123,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/dmg/knowledge/convert.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.3/lib/commands/dmg/knowledge/convert.js)_
+_See code: [lib/commands/dmg/knowledge/convert.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.4/lib/commands/dmg/knowledge/convert.js)_
 
 ## `sfdx dmg:workbench:open [-s <string> -t <string>] [-r <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -151,5 +151,5 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/dmg/workbench/open.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.3/lib/commands/dmg/workbench/open.js)_
+_See code: [lib/commands/dmg/workbench/open.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.4/lib/commands/dmg/workbench/open.js)_
 <!-- commandsstop -->
