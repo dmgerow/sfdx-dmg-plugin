@@ -1,0 +1,11 @@
+{
+    "base64decode": {
+        "description": "convert base64 csv to files",
+        "flags": {
+            "source": "source file relative path",
+            "target": "target file relative path",
+            "base64column": "column header with base64 data in it",
+            "filenamecolumn": "column header with file name in it"
+        }
+    }
+}
