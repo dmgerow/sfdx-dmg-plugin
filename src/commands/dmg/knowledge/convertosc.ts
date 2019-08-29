@@ -52,35 +52,117 @@ export default class KnowledgeConversionOsc extends SfdxCommand {
         }
         const filenamecolumn = this.flags.filenamecolumn;
         const base64column = this.flags.base64column;
+        const answerIdColumn = "Answer ID";
         const sourceFile = fs.createReadStream(source);
+        const uniqueKnowledgeJson = {};
+        const tier1Cat = "Tertiary-Product";
+        const tier2Cat = "Sub-Product";
+        const tier3Cat = "Product";
+        const knowledgeMappings = {
+            "Address Change": "Other",
+            "Adoption": "Adoption",
+            "Bicycle": "Commuter_Benefits_Bicycle_Reimbursement",
+            "Bicycle Parking Inquiry": "Commuter_Benefits_Bicycle_Reimbursement",
+            "Bicycle Transit Inquiry": "Commuter_Benefits_Bicycle_Reimbursement",
+            "Billing (Retiree/Direct)": "N/A",
+            "Call Transfers": "Other",
+            "Claim or Carrier Inquiry": "N/A",
+            "COBRA Benefits": "COBRA",
+            "CPP - Computer Purchase Plan": "N/A",
+            "Direct Bill": "Direct_Bill",
+            "Employer Parking": "Commuter_Benefits_Parking",
+            "EPP - Employee Purchase Plan": "N/A",
+            "Explain Parking Benefits": "Commuter_Benefits_Parking",
+            "Explain Transit Benefits": "Commuter_Benefits_Transit_Vanpool",
+            "FSA": "FSA",
+            "General": "Other",
+            "HRA": "HRA",
+            "HSA": "HSA",
+            "iHRA": "HRA",
+            "Parking": "Commuter_Benefits_Parking",
+            "Parking Commuter Card": "Commuter_Benefits_Parking",
+            "Parking Pay Me Back": "Commuter_Benefits_Parking",
+            "Pay My Parking": "Commuter_Benefits_Parking",
+            "Phone/Fax Request or Confirm": "N/A",
+            "Post Office Return": "Commuter_Benefits_Transit_Vanpool",
+            "Profile Update/Website Navigation": "Commuter",
+            "Public Transportation Pay Me Back": "Commuter_Benefits_Transit_Vanpool",
+            "Public Transportation/Vanpool": "Commuter_Benefits_Transit_Vanpool",
+            "Retiree Bill": "Direct_Bill",
+            "Retiree General Question": "N/A",
+            "Retiree Health Care Account": "N/A",
+            "Specific Product Inquiry": "Commuter_Benefits_Transit_Vanpool",
+            "SPR - Spousal Reimbursement Plan": "N/A",
+            "Transit Commuter Card": "Commuter_Benefits_Transit_Vanpool",
+            "Tuition": "Tuition",
+            "Vanpool": "Commuter_Benefits_Transit_Vanpool",
+            "Wellness Bio Data": "N/A",
+            "COBRA": "COBRA",
+            "Commuter": "Commuter",
+            "DC": "DC_FSA",
+            "Enrollment & Eligibility": "E_E",
+            "ESP": "ESP",
+            "Gym Reimbursement": "Gym",
+            "Health Care": "N/A",
+            "Wellness": "Wellness",
+        }
         let count = 0;
         let targetJson = {
             meta: {},
             data: []
         };
-        await fs.promises.mkdir(join(target, "attachments"), { recursive: true });
-        await fs.promises.mkdir(join(target, "html"), { recursive: true });
+        fs.mkdirSync(join(target, "attachments"), { recursive: true });
+        fs.mkdirSync(join(target, "html"), { recursive: true });
         Papa.parse(sourceFile, {
             worker: true,
             header: true,
             step: function (result) {
                 targetJson.meta = result.meta;
                 let csvRow = result.data;
-                htmlcolumns.forEach(function (htmlheader) {
-                    if (result.data[htmlheader]) {
-                        let htmFileName = uuidv4().replace(/-/g, '') + ".htm";
-                        fs.writeFileSync(join(target, "html", htmFileName), result.data[htmlheader]);
-                        csvRow[htmlheader] = join("html", htmFileName);
-                    }
-                });
-                if (filenamecolumn && base64column && result.data[base64column] && result.data[filenamecolumn]) {
-                    fs.writeFileSync(join(target, "attachments", result.data[filenamecolumn]), result.data[base64column], 'base64');
-                    csvRow[base64column] = join("attachments", result.data[filenamecolumn]);
+                let exists = uniqueKnowledgeJson[csvRow[answerIdColumn]] ? true : false;
+
+                // do mapping
+                if (csvRow[tier1Cat]) {
+                    csvRow[tier1Cat] = knowledgeMappings[csvRow[tier1Cat]];
+                } else if (csvRow[tier2Cat]) {
+                    csvRow[tier1Cat] = knowledgeMappings[csvRow[tier2Cat]];
+                } else if (csvRow[tier3Cat]) {
+                    csvRow[tier1Cat] = knowledgeMappings[csvRow[tier3Cat]];
                 }
-                targetJson.data.push(csvRow);
+
+                let updatedRow = exists ? uniqueKnowledgeJson[csvRow[answerIdColumn]] : csvRow;
+
+                // concatenate
+                if (!updatedRow[tier1Cat].includes(csvRow[tier1Cat])) {
+                    if (updatedRow[tier1Cat]) {
+                        updatedRow[tier1Cat] = updatedRow[tier1Cat] + "+" + csvRow[tier1Cat];
+                    } else {
+                        updatedRow[tier1Cat] = csvRow[tier1Cat];
+                    }
+                }
+                if (!exists) {
+                    htmlcolumns.forEach(function (htmlheader) {
+                        if (updatedRow[htmlheader]) {
+                            let htmFileName = uuidv4().replace(/-/g, '') + ".htm";
+                            fs.writeFileSync(join(target, "html", htmFileName), updatedRow[htmlheader]);
+                            updatedRow[htmlheader] = join("html", htmFileName);
+                        }
+                    });
+                    if (filenamecolumn && base64column && updatedRow[base64column] && updatedRow[filenamecolumn]) {
+                        fs.writeFileSync(join(target, "attachments", updatedRow[filenamecolumn]), updatedRow[base64column], 'base64');
+                        updatedRow[base64column] = join("attachments", updatedRow[filenamecolumn]);
+                    }
+                }
+                uniqueKnowledgeJson[updatedRow[answerIdColumn]] = updatedRow;
+                // targetJson.data.push(csvRow);
                 count++;
             },
             complete: function (results, file) {
+                for (var key in uniqueKnowledgeJson) {
+                    if (uniqueKnowledgeJson.hasOwnProperty(key)) {
+                        targetJson.data.push(uniqueKnowledgeJson[key]);
+                    }
+                }
                 const targetCsv = Papa.unparse(targetJson);
                 fs.writeFileSync(join(target, "knowledge.csv"), targetCsv);
                 console.log('Processed', count, 'rows.');
