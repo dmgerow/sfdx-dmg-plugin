@@ -68,7 +68,7 @@ export default class KnowledgeConversion extends SfdxCommand {
                 let csvRow = result.data;
                 htmlcolumns.forEach(function (htmlheader) {
                     if (result.data[htmlheader]) {
-                        let htmFileName = uuidv4() + ".htm";
+                        let htmFileName = uuidv4().replace(/-/g, '') + ".htm";
                         fs.writeFileSync(join(target, "html", htmFileName), result.data[htmlheader]);
                         csvRow[htmlheader] = join("html", htmFileName);
                     }
