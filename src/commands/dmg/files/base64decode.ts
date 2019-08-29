@@ -43,21 +43,24 @@ export default class Base64Decode extends SfdxCommand {
         const target = this.flags.target;
         const base64column = this.flags.base64column;
         const filenamecolumn = this.flags.filenamecolumn;
+        const parentIdColumn = "Legacy_Case_Number__c";
         const sourceFile = fs.createReadStream(source);
         let count = 0;
         let targetJson = {
             meta: {},
             data: []
         };
-        await fs.promises.mkdir(join(target, "attachments"), { recursive: true });
+        // await fs.promises.mkdir(join(target, "attachments"), { recursive: true });
         Papa.parse(sourceFile, {
             worker: true,
             header: true,
             step: function (result) {
-                fs.writeFileSync(join(target, "attachments", result.data[filenamecolumn]), result.data[base64column], 'base64');
+                const path = join(target, "attachments", result.data[parentIdColumn]);
+                fs.mkdirSync(path, { recursive: true });
+                fs.writeFileSync(join(path, result.data[filenamecolumn]), result.data[base64column], 'base64');
                 targetJson.meta = result.meta;
                 let csvRow = result.data;
-                csvRow[base64column] = join("attachments", result.data[filenamecolumn]);
+                csvRow[base64column] = join("attachments", result.data[parentIdColumn], result.data[filenamecolumn]);
                 targetJson.data.push(csvRow);
                 count++;
             },
