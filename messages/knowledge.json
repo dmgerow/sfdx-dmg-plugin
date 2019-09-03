@@ -8,5 +8,15 @@
             "base64column": "column header with base64 data in it",
             "filenamecolumn": "column with base64 text for file"
         }
+    },
+    "convertosc": {
+        "description": "convert a csv with rich text to html from OSC",
+        "flags": {
+            "source": "source file relative path",
+            "target": "target file relative path",
+            "htmlcolumns": "comma-separated list of columns with rich text",
+            "base64column": "column header with base64 data in it",
+            "filenamecolumn": "column with base64 text for file"
+        }
     }
 }

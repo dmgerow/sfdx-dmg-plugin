@@ -12,6 +12,7 @@
     "node-forge": "^0.8.5",
     "open": "^6.4.0",
     "papaparse": "^5.0.2",
+    "strip-color": "^0.1.0",
     "tslib": "^1",
     "uuid": "^3.3.3"
   },
