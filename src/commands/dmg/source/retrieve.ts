@@ -36,9 +36,12 @@ export default class Retrieve extends SfdxCommand {
         const nocleandirectory = this.flags.nocleandirectory;
         if (!nocleandirectory) {
             process.stdout.write('Cleaning your workspace...\n');
-            await exec(`sfdx dmg:source:cleanup`);
+            const cleanupResult = await exec(`sfdx dmg:source:cleanup`);
+            this.ux.log(cleanupResult.stdout);
         }
-        process.stdout.write('Retrieving metadata...\n');
-        await exec(`sfdx force:source:retrieve -u ${targetusername} -x ${manifest}`);
+        this.ux.log('Retrieving metadata...');
+        const retrieveResult = await exec(`sfdx force:source:retrieve -u ${targetusername} -x ${manifest}`);
+        this.ux.log(retrieveResult.stdout);
+        return retrieveResult;
     }
 }

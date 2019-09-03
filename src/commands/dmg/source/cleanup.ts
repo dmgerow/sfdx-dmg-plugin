@@ -24,7 +24,7 @@ export default class Cleanup extends SfdxCommand {
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const path = join('force-app', 'main', 'default');
-        process.stdout.write('Cleaning fodered directories in ' + path + '!\n');
+        this.ux.log('Cleaning foldered directories in ' + path + '!\n');
 
         if (!fs.existsSync(path)) {
             this.ux.error('your path ' + path + ' doesn\'t exist');
@@ -33,6 +33,7 @@ export default class Cleanup extends SfdxCommand {
         fs.emptyDirSync(join(path, 'objects'));
         fs.emptyDirSync(join(path, 'objectTranslations'));
 
-        process.stdout.write('Done!\n');
+        this.ux.log('Directory cleaning complete!');
+        return;
     }
 }
