@@ -35,7 +35,7 @@ export default class Cleanup extends SfdxCommand {
             this.ux.error('your path ' + path + ' doesn\'t exist');
         }
 
-        fs.emptyDirSync(join(path, 'object'));
+        fs.emptyDirSync(join(path, 'objects'));
         fs.emptyDirSync(join(path, 'objectTranslations'));
 
         process.stdout.write('Done!\n');
