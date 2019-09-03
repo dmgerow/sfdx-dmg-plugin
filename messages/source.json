@@ -1,0 +1,8 @@
+{
+    "cleanup": {
+        "description": "clear directories",
+        "flags": {
+            "path": "path to sfdx source"
+        }
+    }
+}
