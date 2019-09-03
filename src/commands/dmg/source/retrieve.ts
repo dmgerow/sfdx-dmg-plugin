@@ -1,8 +1,6 @@
 import { flags, SfdxCommand } from '@salesforce/command';
 import { Messages } from "@salesforce/core";
-import fs = require('fs-extra');
 import { exec } from '../../../lib/execProm';
-import { join } from 'path';
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
@@ -32,16 +30,15 @@ export default class Retrieve extends SfdxCommand {
 
     protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
         const targetusername = this.org.getUsername();
         const manifest = this.flags.manifest;
         const nocleandirectory = this.flags.nocleandirectory;
-
-        fs.ensureDirSync(join(this.project.getPath(), 'main', 'default'));
         if (!nocleandirectory) {
+            process.stdout.write('Cleaning your workspace...\n');
             await exec(`sfdx dmg:source:cleanup`);
         }
+        process.stdout.write('Retrieving metadata...\n');
         await exec(`sfdx force:source:retrieve -u ${targetusername} -x ${manifest}`);
     }
 }

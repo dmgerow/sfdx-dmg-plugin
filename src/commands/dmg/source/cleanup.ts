@@ -23,7 +23,8 @@ export default class Cleanup extends SfdxCommand {
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        const path = join(this.project.getPath(), 'main', 'default');
+        const path = join('force-app', 'main', 'default');
+        process.stdout.write('Cleaning fodered directories in ' + path + '!\n');
 
         if (!fs.existsSync(path)) {
             this.ux.error('your path ' + path + ' doesn\'t exist');
