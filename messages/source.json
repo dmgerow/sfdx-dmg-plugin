@@ -1,8 +1,13 @@
 {
     "cleanup": {
         "description": "clear directories",
+        "flags": {}
+    },
+    "retrieve": {
+        "description": "retrieves source using the native command, with an option to clear out foldered directories first (objects and object translations)",
         "flags": {
-            "path": "path to sfdx source"
+            "manifest": "The complete path for the manifest (package.xml) file that specifies the components to retrieve.",
+            "nocleandirectory": "Specify this to prevent the directory from being cleared before retrieving. Clearing is done to prevent deleted fields from being deployed."
         }
     }
 }

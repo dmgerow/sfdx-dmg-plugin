@@ -1,7 +1,6 @@
-import { flags, SfdxCommand } from '@salesforce/command';
+import { SfdxCommand } from '@salesforce/command';
 import { Messages } from "@salesforce/core";
 import fs = require('fs-extra');
-// import { exec } from '../../../lib/execProm';
 import { join } from 'path';
 
 // Initialize Messages with the current plugin directory
@@ -18,18 +17,13 @@ export default class Cleanup extends SfdxCommand {
 
     // protected static requiresUsername = true;
 
-    public static readonly flagsConfig = {
-        path: flags.string({
-            char: "p",
-            description: messages.getMessage("cleanup.flags.path")
-        })
-    };
+    public static readonly flagsConfig = {};
 
     protected static requiresProject = true;
 
     // tslint:disable-next-line:no-any
     public async run(): Promise<any> {
-        const path = this.flags.path ? this.flags.path : join('force-app', 'main', 'default');
+        const path = join(this.project.getPath(), 'main', 'default');
 
         if (!fs.existsSync(path)) {
             this.ux.error('your path ' + path + ' doesn\'t exist');
