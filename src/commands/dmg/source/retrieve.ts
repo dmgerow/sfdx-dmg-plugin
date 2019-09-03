@@ -44,7 +44,7 @@ export default class Retrieve extends SfdxCommand {
             }
         }
         this.ux.log('Retrieving metadata...');
-        const retrieveResult = await exec(`sfdx force:source:retrieve -u ${targetusername} -x ${manifest}`);
+        const retrieveResult = await exec(`sfdx force:source:retrieve -u ${targetusername} -x ${manifest}`, { maxBuffer: 1024 * 5000 });
         if (retrieveResult.stderr) {
             this.ux.log(retrieveResult.stderr);
         }
