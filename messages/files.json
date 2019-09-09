@@ -6,7 +6,7 @@
             "target": "target file relative path",
             "base64column": "column header with base64 data in it",
             "filenamecolumn": "column header with file name in it",
-            "parentIdColumn": "column header that contains the unique ID of the attachment's parent"
+            "parentidcolumn": "column header that contains the unique ID of the attachment's parent"
         }
     }
 }

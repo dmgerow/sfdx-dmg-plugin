@@ -36,9 +36,9 @@ export default class Base64Decode extends SfdxCommand {
             description: messages.getMessage("base64decode.flags.filenamecolumn"),
             required: true
         }),
-        parentIdColumn: flags.string({
+        parentidcolumn: flags.string({
             char: "p",
-            description: messages.getMessage("base64decode.flags.parentIdColumn"),
+            description: messages.getMessage("base64decode.flags.parentidcolumn"),
             required: true
         })
     };
@@ -48,7 +48,7 @@ export default class Base64Decode extends SfdxCommand {
         const target = this.flags.target;
         const base64column = this.flags.base64column;
         const filenamecolumn = this.flags.filenamecolumn;
-        const parentIdColumn = this.flags.parentIdColumn;
+        const parentidcolumn = this.flags.parentidcolumn;
         const sourceFile = fs.createReadStream(source);
         let count = 0;
         let targetJson = {
@@ -60,12 +60,12 @@ export default class Base64Decode extends SfdxCommand {
             worker: true,
             header: true,
             step: function (result) {
-                const path = join(target, "attachments", result.data[parentIdColumn]);
+                const path = join(target, "attachments", result.data[parentidcolumn]);
                 fs.mkdirSync(path, { recursive: true });
                 fs.writeFileSync(join(path, result.data[filenamecolumn]), result.data[base64column], 'base64');
                 targetJson.meta = result.meta;
                 let csvRow = result.data;
-                csvRow[base64column] = join("attachments", result.data[parentIdColumn], result.data[filenamecolumn]);
+                csvRow[base64column] = join("attachments", result.data[parentidcolumn], result.data[filenamecolumn]);
                 targetJson.data.push(csvRow);
                 count++;
             },
