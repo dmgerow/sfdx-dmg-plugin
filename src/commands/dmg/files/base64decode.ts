@@ -35,6 +35,11 @@ export default class Base64Decode extends SfdxCommand {
             char: "f",
             description: messages.getMessage("base64decode.flags.filenamecolumn"),
             required: true
+        }),
+        parentIdColumn: flags.string({
+            char: "p",
+            description: messages.getMessage("base64decode.flags.parentIdColumn"),
+            required: true
         })
     };
 
@@ -43,7 +48,7 @@ export default class Base64Decode extends SfdxCommand {
         const target = this.flags.target;
         const base64column = this.flags.base64column;
         const filenamecolumn = this.flags.filenamecolumn;
-        const parentIdColumn = "Legacy_Case_Number__c";
+        const parentIdColumn = this.flags.parentIdColumn;
         const sourceFile = fs.createReadStream(source);
         let count = 0;
         let targetJson = {
