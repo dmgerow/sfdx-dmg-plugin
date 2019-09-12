@@ -70,7 +70,7 @@ OPTIONS
       [default: warn] logging level for this command invocation
 ```
 
-_See code: [lib/commands/dmg/connectedapp/create.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.14/lib/commands/dmg/connectedapp/create.js)_
+_See code: [lib/commands/dmg/connectedapp/create.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.15/lib/commands/dmg/connectedapp/create.js)_
 
 ## `sfdx dmg:files:base64decode -s <string> -t <string> -c <string> -f <string> -p <string> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -102,7 +102,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/dmg/files/base64decode.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.14/lib/commands/dmg/files/base64decode.js)_
+_See code: [lib/commands/dmg/files/base64decode.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.15/lib/commands/dmg/files/base64decode.js)_
 
 ## `sfdx dmg:knowledge:convert -s <string> -t <string> [-h <string>] [-f <string>] [-c <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -130,7 +130,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/dmg/knowledge/convert.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.14/lib/commands/dmg/knowledge/convert.js)_
+_See code: [lib/commands/dmg/knowledge/convert.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.15/lib/commands/dmg/knowledge/convert.js)_
 
 ## `sfdx dmg:knowledge:convertosc -s <string> -t <string> [-h <string>] [-f <string>] [-c <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -158,7 +158,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/dmg/knowledge/convertosc.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.14/lib/commands/dmg/knowledge/convertosc.js)_
+_See code: [lib/commands/dmg/knowledge/convertosc.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.15/lib/commands/dmg/knowledge/convertosc.js)_
 
 ## `sfdx dmg:source:cleanup [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -175,7 +175,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/dmg/source/cleanup.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.14/lib/commands/dmg/source/cleanup.js)_
+_See code: [lib/commands/dmg/source/cleanup.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.15/lib/commands/dmg/source/cleanup.js)_
 
 ## `sfdx dmg:source:retrieve -x <string> [-n] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -210,7 +210,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/dmg/source/retrieve.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.14/lib/commands/dmg/source/retrieve.js)_
+_See code: [lib/commands/dmg/source/retrieve.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.15/lib/commands/dmg/source/retrieve.js)_
 
 ## `sfdx dmg:workbench:open [-s <string> -t <string>] [-r <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -238,5 +238,5 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [lib/commands/dmg/workbench/open.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.14/lib/commands/dmg/workbench/open.js)_
+_See code: [lib/commands/dmg/workbench/open.js](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.0.15/lib/commands/dmg/workbench/open.js)_
 <!-- commandsstop -->
