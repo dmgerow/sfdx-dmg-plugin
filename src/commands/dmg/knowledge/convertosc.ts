@@ -117,6 +117,8 @@ export default class KnowledgeConversionOsc extends SfdxCommand {
             worker: true,
             header: true,
             step: function (result) {
+                console.log(count + 2);
+                console.log(result);
                 targetJson.meta = result.meta;
                 let csvRow = result.data;
                 let exists = uniqueKnowledgeJson[csvRow[answerIdColumn]] ? true : false;
@@ -133,13 +135,12 @@ export default class KnowledgeConversionOsc extends SfdxCommand {
                 let updatedRow = exists ? uniqueKnowledgeJson[csvRow[answerIdColumn]] : csvRow;
 
                 // concatenate
-                if (!updatedRow[tier1Cat].includes(csvRow[tier1Cat])) {
-                    if (updatedRow[tier1Cat]) {
-                        updatedRow[tier1Cat] = updatedRow[tier1Cat] + "+" + csvRow[tier1Cat];
-                    } else {
-                        updatedRow[tier1Cat] = csvRow[tier1Cat];
-                    }
+                if (updatedRow[tier1Cat] && !updatedRow[tier1Cat].includes(csvRow[tier1Cat])) {
+                    updatedRow[tier1Cat] = updatedRow[tier1Cat] + "+" + csvRow[tier1Cat];
+                } else {
+                    updatedRow[tier1Cat] = csvRow[tier1Cat];
                 }
+
                 if (!exists) {
                     htmlcolumns.forEach(function (htmlheader) {
                         if (updatedRow[htmlheader]) {
