@@ -60,6 +60,8 @@ export default class Base64Decode extends SfdxCommand {
             worker: true,
             header: true,
             step: function (result) {
+                console.log(count + 2);
+                console.log(result.data[parentidcolumn]);
                 const path = join(target, "attachments", result.data[parentidcolumn]);
                 fs.mkdirSync(path, { recursive: true });
                 fs.writeFileSync(join(path, result.data[filenamecolumn]), result.data[base64column], 'base64');
