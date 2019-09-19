@@ -135,11 +135,6 @@ export default class KnowledgeConversionOsc extends SfdxCommand {
                 let updatedRow = exists ? uniqueKnowledgeJson[csvRow[answerIdColumn]] : csvRow;
 
                 // concatenate
-                // if (updatedRow[dataCat] && !updatedRow[dataCat].includes(csvRow[tier1Cat] + '+')) {
-                //     updatedRow[dataCat] = updatedRow[dataCat] + "+" + csvRow[tier1Cat];
-                // } else {
-                //     updatedRow[dataCat] = csvRow[tier1Cat];
-                // }
                 if (dataCategoriesByAnswerId[csvRow[answerIdColumn]]) {
                     if (!dataCategoriesByAnswerId[csvRow[answerIdColumn]].includes(csvRow[tier1Cat])) {
                         dataCategoriesByAnswerId[csvRow[answerIdColumn]].push(csvRow[tier1Cat]);
@@ -178,7 +173,7 @@ export default class KnowledgeConversionOsc extends SfdxCommand {
                     }
                     dataCategoriesString = dataCategoriesString.replace(/.$/, "");
                     console.log(dataCategoriesString);
-                    uniqueKnowledgeJson[key][tier3Cat] = dataCategoriesString;
+                    uniqueKnowledgeJson[key][tier1Cat] = dataCategoriesString;
                     if (uniqueKnowledgeJson.hasOwnProperty(key)) {
                         targetJson.data.push(uniqueKnowledgeJson[key]);
                     }
