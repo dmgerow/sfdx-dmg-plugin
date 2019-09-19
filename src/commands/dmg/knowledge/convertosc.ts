@@ -111,6 +111,7 @@ export default class KnowledgeConversionOsc extends SfdxCommand {
             meta: {},
             data: []
         };
+        let dataCategoriesByAnswerId = {};
         fs.mkdirSync(join(target, "attachments"), { recursive: true });
         fs.mkdirSync(join(target, "html"), { recursive: true });
         Papa.parse(sourceFile, {
@@ -118,7 +119,6 @@ export default class KnowledgeConversionOsc extends SfdxCommand {
             header: true,
             step: function (result) {
                 console.log(count + 2);
-                console.log(result);
                 targetJson.meta = result.meta;
                 let csvRow = result.data;
                 let exists = uniqueKnowledgeJson[csvRow[answerIdColumn]] ? true : false;
@@ -135,10 +135,17 @@ export default class KnowledgeConversionOsc extends SfdxCommand {
                 let updatedRow = exists ? uniqueKnowledgeJson[csvRow[answerIdColumn]] : csvRow;
 
                 // concatenate
-                if (updatedRow[tier1Cat] && !updatedRow[tier1Cat].includes(csvRow[tier1Cat])) {
-                    updatedRow[tier1Cat] = updatedRow[tier1Cat] + "+" + csvRow[tier1Cat];
+                // if (updatedRow[dataCat] && !updatedRow[dataCat].includes(csvRow[tier1Cat] + '+')) {
+                //     updatedRow[dataCat] = updatedRow[dataCat] + "+" + csvRow[tier1Cat];
+                // } else {
+                //     updatedRow[dataCat] = csvRow[tier1Cat];
+                // }
+                if (dataCategoriesByAnswerId[csvRow[answerIdColumn]]) {
+                    if (!dataCategoriesByAnswerId[csvRow[answerIdColumn]].includes(csvRow[tier1Cat])) {
+                        dataCategoriesByAnswerId[csvRow[answerIdColumn]].push(csvRow[tier1Cat]);
+                    }
                 } else {
-                    updatedRow[tier1Cat] = csvRow[tier1Cat];
+                    dataCategoriesByAnswerId[csvRow[answerIdColumn]] = [csvRow[tier1Cat]];
                 }
 
                 if (!exists) {
@@ -160,12 +167,24 @@ export default class KnowledgeConversionOsc extends SfdxCommand {
             },
             complete: function (results, file) {
                 for (var key in uniqueKnowledgeJson) {
+                    console.log(key);
+                    let dataCategories = dataCategoriesByAnswerId[key];
+                    console.log(dataCategories);
+                    let dataCategoriesString = '';
+                    if (dataCategories) {
+                        dataCategories.forEach(category => {
+                            dataCategoriesString += category + '+';
+                        });
+                    }
+                    dataCategoriesString = dataCategoriesString.replace(/.$/, "");
+                    console.log(dataCategoriesString);
+                    uniqueKnowledgeJson[key][tier3Cat] = dataCategoriesString;
                     if (uniqueKnowledgeJson.hasOwnProperty(key)) {
                         targetJson.data.push(uniqueKnowledgeJson[key]);
                     }
                 }
                 const targetCsv = Papa.unparse(targetJson);
-                fs.writeFileSync(join(target, "knowledge.csv"), targetCsv);
+                fs.writeFileSync(join(target, "knowledgeConverted.csv"), targetCsv);
                 console.log('Processed', count, 'rows.');
             }
         });
