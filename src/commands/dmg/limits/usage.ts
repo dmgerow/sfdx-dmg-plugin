@@ -21,12 +21,13 @@ export default class LimitsUsage extends SfdxCommand {
         const org = this.org;
         const conn = org.getConnection();
         await org.refreshAuth();
-
-        const accessToken = conn.accessToken;
-        // const instanceUrl = conn.instanceUrl;
-        // const apiVersion = conn.version;
-        // const serverUrl = `${instanceUrl}/services/Soap/u/${apiVersion}`;
-        this.ux.log(accessToken);
+        const theurl = `${conn.baseUrl()}/services/data/${conn.version}/limits/`;
+        this.ux.log(theurl);
+        const limitResult = <any>await conn.request({
+            method: 'GET',
+            url: theurl
+        });
+        this.ux.log(limitResult);
         return;
     }
 }
