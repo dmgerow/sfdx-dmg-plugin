@@ -1,6 +1,6 @@
 {
   "name": "sfdx-dmg-plugin",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "author": "Dylan Gerow @dmgerow",
   "bugs": "https://github.com/dmgerow/sfdx-dmg-plugin/issues",
   "dependencies": {
