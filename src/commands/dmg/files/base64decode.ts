@@ -12,71 +12,78 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages("sfdx-dmg-plugin", "files");
 
 export default class Base64Decode extends SfdxCommand {
-    public static description = messages.getMessage("base64decode.description");
-    public static examples = [];
+  public static description = messages.getMessage("base64decode.description");
+  public static examples = [];
 
-    public static readonly flagsConfig = {
-        source: flags.string({
-            char: "s",
-            description: messages.getMessage("base64decode.flags.source"),
-            required: true
-        }),
-        target: flags.string({
-            char: "t",
-            description: messages.getMessage("base64decode.flags.target"),
-            required: true
-        }),
-        base64column: flags.string({
-            char: "c",
-            description: messages.getMessage("base64decode.flags.base64column"),
-            required: true
-        }),
-        filenamecolumn: flags.string({
-            char: "f",
-            description: messages.getMessage("base64decode.flags.filenamecolumn"),
-            required: true
-        }),
-        parentidcolumn: flags.string({
-            char: "p",
-            description: messages.getMessage("base64decode.flags.parentidcolumn"),
-            required: true
-        })
+  public static readonly flagsConfig = {
+    source: flags.string({
+      char: "s",
+      description: messages.getMessage("base64decode.flags.source"),
+      required: true,
+    }),
+    target: flags.string({
+      char: "t",
+      description: messages.getMessage("base64decode.flags.target"),
+      required: true,
+    }),
+    base64column: flags.string({
+      char: "c",
+      description: messages.getMessage("base64decode.flags.base64column"),
+      required: true,
+    }),
+    filenamecolumn: flags.string({
+      char: "f",
+      description: messages.getMessage("base64decode.flags.filenamecolumn"),
+      required: true,
+    }),
+    parentidcolumn: flags.string({
+      char: "p",
+      description: messages.getMessage("base64decode.flags.parentidcolumn"),
+      required: true,
+    }),
+  };
+
+  public async run(): Promise<any> {
+    const source = this.flags.source;
+    const target = this.flags.target;
+    const base64column = this.flags.base64column;
+    const filenamecolumn = this.flags.filenamecolumn;
+    const parentidcolumn = this.flags.parentidcolumn;
+    const sourceFile = fs.createReadStream(source);
+    let count = 0;
+    let targetJson = {
+      meta: {},
+      data: [],
     };
-
-    public async run(): Promise<any> {
-        const source = this.flags.source;
-        const target = this.flags.target;
-        const base64column = this.flags.base64column;
-        const filenamecolumn = this.flags.filenamecolumn;
-        const parentidcolumn = this.flags.parentidcolumn;
-        const sourceFile = fs.createReadStream(source);
-        let count = 0;
-        let targetJson = {
-            meta: {},
-            data: []
-        };
-        Papa.parse(sourceFile, {
-            worker: true,
-            header: true,
-            step: function (result) {
-                console.log(count + 2);
-                console.log(result.data[parentidcolumn]);
-                const path = join(target, "attachments", result.data[parentidcolumn]);
-                fs.mkdirSync(path, { recursive: true });
-                fs.writeFileSync(join(path, result.data[filenamecolumn]), result.data[base64column], 'base64');
-                targetJson.meta = result.meta;
-                let csvRow = result.data;
-                csvRow[base64column] = join("attachments", result.data[parentidcolumn], result.data[filenamecolumn]);
-                targetJson.data.push(csvRow);
-                count++;
-            },
-            complete: function (results, file) {
-                const targetCsv = Papa.unparse(targetJson);
-                fs.writeFileSync(join(target, "files.csv"), targetCsv);
-                console.log('Processed', count, 'rows.');
-            }
-        });
-        return;
-    }
-
+    Papa.parse(sourceFile, {
+      worker: true,
+      header: true,
+      step: function (result) {
+        console.log(count + 2);
+        console.log(result.data[parentidcolumn]);
+        const path = join(target, "attachments", result.data[parentidcolumn]);
+        fs.mkdirSync(path, { recursive: true });
+        fs.writeFileSync(
+          join(path, result.data[filenamecolumn]),
+          result.data[base64column],
+          "base64"
+        );
+        targetJson.meta = result.meta;
+        let csvRow = result.data;
+        csvRow[base64column] = join(
+          "attachments",
+          result.data[parentidcolumn],
+          result.data[filenamecolumn]
+        );
+        targetJson.data.push(csvRow);
+        count++;
+      },
+      complete: function (results, file) {
+        const targetCsv = Papa.unparse(targetJson);
+        fs.writeFileSync(join(target, "files.csv"), targetCsv);
+        console.log("Processed", count, "rows.");
+      },
+    });
+    return;
+  }
 }

@@ -21,17 +21,17 @@ export default class WorkbenchOpen extends SfdxCommand {
   protected static flagsConfig = {
     targetworkbenchurl: flags.string({
       char: "t",
-      description: messages.getMessage("open.flags.targetworkbenchurl")
+      description: messages.getMessage("open.flags.targetworkbenchurl"),
     }),
     setdefaultworkbenchurl: flags.string({
       char: "s",
       description: messages.getMessage("open.flags.setdefaultworkbenchurl"),
-      dependsOn: ["targetworkbenchurl"]
+      dependsOn: ["targetworkbenchurl"],
     }),
     urlonly: flags.string({
       char: "r",
-      description: messages.getMessage("open.flags.urlonly")
-    })
+      description: messages.getMessage("open.flags.urlonly"),
+    }),
   };
 
   protected static requiresUsername = true;
@@ -54,7 +54,7 @@ export default class WorkbenchOpen extends SfdxCommand {
       // store default workbench url if if possible
       if (setDefaultworkbenchUrl) {
         const workbench = {
-          defaultWorkbenchUrl: targetWorkbenchUrl
+          defaultWorkbenchUrl: targetWorkbenchUrl,
         };
         await fsx.outputFile(
           globalWorkbenchFilePath,

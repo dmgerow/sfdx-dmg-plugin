@@ -22,33 +22,33 @@ export default class ConnectedAppCreate extends SfdxCommand {
     name: flags.string({
       char: "n",
       description: messages.getMessage("create.flags.name"),
-      required: true
+      required: true,
     }),
     label: flags.string({
       char: "l",
-      description: messages.getMessage("create.flags.label")
+      description: messages.getMessage("create.flags.label"),
     }),
     certificate: flags.boolean({
       char: "r",
-      description: messages.getMessage("create.flags.certificate")
+      description: messages.getMessage("create.flags.certificate"),
     }),
     callbackurl: flags.string({
       char: "c",
-      description: messages.getMessage("create.flags.callbackurl")
+      description: messages.getMessage("create.flags.callbackurl"),
     }),
     description: flags.string({
       char: "d",
-      description: messages.getMessage("create.flags.description")
+      description: messages.getMessage("create.flags.description"),
     }),
     scopes: flags.string({
       // Basic,Api,Web,Full,Chatter,CustomApplications,RefreshToken,OpenID,CustomPermissions,Wave,Eclair
       char: "s",
-      description: messages.getMessage("create.flags.scopes")
+      description: messages.getMessage("create.flags.scopes"),
     }),
     contactemail: flags.string({
       char: "e",
-      description: messages.getMessage("create.flags.contactemail")
-    })
+      description: messages.getMessage("create.flags.contactemail"),
+    }),
   };
 
   protected static requiresUsername = true;
@@ -65,7 +65,7 @@ export default class ConnectedAppCreate extends SfdxCommand {
     const scopes = (this.flags.scopes && this.flags.scopes.split(",")) || [
       "Api",
       "Web",
-      "RefreshToken"
+      "RefreshToken",
     ];
 
     const consumerSecret = this.getConsumerSecret();
@@ -76,8 +76,8 @@ export default class ConnectedAppCreate extends SfdxCommand {
         description,
         fullName,
         label,
-        oauthConfig: { callbackUrl, consumerSecret, scopes }
-      }
+        oauthConfig: { callbackUrl, consumerSecret, scopes },
+      },
     ];
 
     if (createCerts) {

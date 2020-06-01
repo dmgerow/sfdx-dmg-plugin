@@ -9,35 +9,35 @@ export function getSelfSignedCertificate(pki, keys) {
   const attrs = [
     {
       name: "commonName",
-      value: "dgerow.com"
+      value: "dgerow.com",
     },
     {
       name: "countryName",
-      value: "US"
+      value: "US",
     },
     {
       shortName: "ST",
-      value: "Illinois"
+      value: "Illinois",
     },
     {
       name: "localityName",
-      value: "Chicago"
+      value: "Chicago",
     },
     {
       name: "organizationName",
-      value: "DGerow"
+      value: "DGerow",
     },
     {
       shortName: "OU",
-      value: "DGerow"
-    }
+      value: "DGerow",
+    },
   ];
   cert.setSubject(attrs);
   cert.setIssuer(attrs);
   cert.setExtensions([
     {
       name: "basicConstraints",
-      cA: true
+      cA: true,
     },
     {
       name: "keyUsage",
@@ -45,7 +45,7 @@ export function getSelfSignedCertificate(pki, keys) {
       digitalSignature: true,
       nonRepudiation: true,
       keyEncipherment: true,
-      dataEncipherment: true
+      dataEncipherment: true,
     },
     {
       name: "extKeyUsage",
@@ -53,7 +53,7 @@ export function getSelfSignedCertificate(pki, keys) {
       clientAuth: true,
       codeSigning: true,
       emailProtection: true,
-      timeStamping: true
+      timeStamping: true,
     },
     {
       name: "nsCertType",
@@ -63,24 +63,24 @@ export function getSelfSignedCertificate(pki, keys) {
       objsign: true,
       sslCA: true,
       emailCA: true,
-      objCA: true
+      objCA: true,
     },
     {
       name: "subjectAltName",
       altNames: [
         {
           type: 6, // URI
-          value: "http://example.org/webid#me"
+          value: "http://example.org/webid#me",
         },
         {
           type: 7, // IP
-          ip: "127.0.0.1"
-        }
-      ]
+          ip: "127.0.0.1",
+        },
+      ],
     },
     {
-      name: "subjectKeyIdentifier"
-    }
+      name: "subjectKeyIdentifier",
+    },
   ]);
 
   // self-sign certificate

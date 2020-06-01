@@ -1,7 +1,7 @@
-import { SfdxCommand } from '@salesforce/command';
+import { SfdxCommand } from "@salesforce/command";
 import { Messages } from "@salesforce/core";
-import fs = require('fs-extra');
-import { join } from 'path';
+import fs = require("fs-extra");
+import { join } from "path";
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
@@ -11,29 +11,29 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages("sfdx-dmg-plugin", "source");
 
 export default class Cleanup extends SfdxCommand {
-    public static description = messages.getMessage("cleanup.description");
+  public static description = messages.getMessage("cleanup.description");
 
-    public static examples = [];
+  public static examples = [];
 
-    // protected static requiresUsername = true;
+  // protected static requiresUsername = true;
 
-    public static readonly flagsConfig = {};
+  public static readonly flagsConfig = {};
 
-    protected static requiresProject = true;
+  protected static requiresProject = true;
 
-    // tslint:disable-next-line:no-any
-    public async run(): Promise<any> {
-        const path = join('force-app', 'main', 'default');
-        this.ux.log('Cleaning foldered directories in ' + path);
+  // tslint:disable-next-line:no-any
+  public async run(): Promise<any> {
+    const path = join("force-app", "main", "default");
+    this.ux.log("Cleaning foldered directories in " + path);
 
-        if (!fs.existsSync(path)) {
-            this.ux.error('your path ' + path + ' doesn\'t exist');
-        }
-
-        fs.emptyDirSync(join(path, 'objects'));
-        fs.emptyDirSync(join(path, 'objectTranslations'));
-
-        this.ux.log('Directory cleaning complete');
-        return;
+    if (!fs.existsSync(path)) {
+      this.ux.error("your path " + path + " doesn't exist");
     }
+
+    fs.emptyDirSync(join(path, "objects"));
+    fs.emptyDirSync(join(path, "objectTranslations"));
+
+    this.ux.log("Directory cleaning complete");
+    return;
+  }
 }
