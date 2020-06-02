@@ -3,6 +3,7 @@ import { Messages } from "@salesforce/core";
 import { join } from "path";
 import * as fs from "fs";
 import * as Papa from "papaparse";
+import * as csvWriter from "csv-write-stream";
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
@@ -51,13 +52,15 @@ export default class Base64Decode extends SfdxCommand {
     const parentidcolumn = this.flags.parentidcolumn;
     const sourceFile = fs.createReadStream(source);
     let count = 0;
-    let targetJson = {
-      meta: {},
-      data: [],
-    };
+    var writer = csvWriter();
+    writer.pipe(
+      fs.createWriteStream(join(target, "files.csv"), { flags: "a" })
+    );
     Papa.parse(sourceFile, {
-      worker: true,
       header: true,
+      transformHeader: function (header) {
+        return header.trim();
+      },
       step: function (result) {
         console.log(count + 2);
         console.log(result.data[parentidcolumn]);
@@ -68,19 +71,17 @@ export default class Base64Decode extends SfdxCommand {
           result.data[base64column],
           "base64"
         );
-        targetJson.meta = result.meta;
         let csvRow = result.data;
         csvRow[base64column] = join(
           "attachments",
           result.data[parentidcolumn],
           result.data[filenamecolumn]
         );
-        targetJson.data.push(csvRow);
+        writer.write(csvRow);
         count++;
       },
-      complete: function (results, file) {
-        const targetCsv = Papa.unparse(targetJson);
-        fs.writeFileSync(join(target, "files.csv"), targetCsv);
+      complete: function () {
+        writer.end();
         console.log("Processed", count, "rows.");
       },
     });
