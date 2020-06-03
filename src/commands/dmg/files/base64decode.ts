@@ -56,15 +56,21 @@ export default class Base64Decode extends SfdxCommand {
     var successWriter = csvWriter();
     var errorWriter = csvWriter();
     successWriter.pipe(
-      fs.createWriteStream(join(target, "success.csv"), { flags: "a" })
+      fs.createWriteStream(join(target, "success.csv"), { flags: "w" })
     );
     errorWriter.pipe(
-      fs.createWriteStream(join(target, "error.csv"), { flags: "a" })
+      fs.createWriteStream(join(target, "error.csv"), { flags: "w" })
     );
     Papa.parse(sourceFile, {
       header: true,
       transformHeader: function (header) {
         return header.trim();
+      },
+      transform: function (value, header) {
+        if (header === filenamecolumn) {
+          return value.replace(/[/\\?%*:|"<>]/g, "-");
+        }
+        return value;
       },
       step: function (result) {
         try {
@@ -73,23 +79,20 @@ export default class Base64Decode extends SfdxCommand {
           const path = join(target, "attachments", result.data[parentidcolumn]);
           console.log("Desired destination path: ", path);
           fs.mkdirSync(path, { recursive: true });
-          console.log("Decoding body");
+          console.log("Decoding body...");
           fs.writeFileSync(
             join(path, result.data[filenamecolumn]),
             result.data[base64column],
             "base64"
           );
+          console.log("Updating target CSV...");
           let csvRow = result.data;
-          csvRow[base64column] = join(
-            "attachments",
-            result.data[parentidcolumn],
-            result.data[filenamecolumn]
-          );
+          csvRow[base64column] = join(path, result.data[filenamecolumn]);
           successWriter.write(csvRow);
           count++;
         } catch (error) {
           errorCount++;
-          console.log("error!", error);
+          console.error(error);
           errorWriter.write(error);
         }
       },
