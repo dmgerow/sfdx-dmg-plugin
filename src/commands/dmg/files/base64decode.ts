@@ -52,9 +52,14 @@ export default class Base64Decode extends SfdxCommand {
     const parentidcolumn = this.flags.parentidcolumn;
     const sourceFile = fs.createReadStream(source);
     let count = 0;
-    var writer = csvWriter();
-    writer.pipe(
-      fs.createWriteStream(join(target, "files.csv"), { flags: "a" })
+    let errorCount = 0;
+    var successWriter = csvWriter();
+    var errorWriter = csvWriter();
+    successWriter.pipe(
+      fs.createWriteStream(join(target, "success.csv"), { flags: "a" })
+    );
+    errorWriter.pipe(
+      fs.createWriteStream(join(target, "error.csv"), { flags: "a" })
     );
     Papa.parse(sourceFile, {
       header: true,
@@ -62,27 +67,36 @@ export default class Base64Decode extends SfdxCommand {
         return header.trim();
       },
       step: function (result) {
-        console.log(count + 2);
-        console.log(result.data[parentidcolumn]);
-        const path = join(target, "attachments", result.data[parentidcolumn]);
-        fs.mkdirSync(path, { recursive: true });
-        fs.writeFileSync(
-          join(path, result.data[filenamecolumn]),
-          result.data[base64column],
-          "base64"
-        );
-        let csvRow = result.data;
-        csvRow[base64column] = join(
-          "attachments",
-          result.data[parentidcolumn],
-          result.data[filenamecolumn]
-        );
-        writer.write(csvRow);
-        count++;
+        try {
+          console.log("Processing row number: ", count + 2);
+          console.log("Parent ID column: ", result.data[parentidcolumn]);
+          const path = join(target, "attachments", result.data[parentidcolumn]);
+          console.log("Desired destination path: ", path);
+          fs.mkdirSync(path, { recursive: true });
+          console.log("Decoding body");
+          fs.writeFileSync(
+            join(path, result.data[filenamecolumn]),
+            result.data[base64column],
+            "base64"
+          );
+          let csvRow = result.data;
+          csvRow[base64column] = join(
+            "attachments",
+            result.data[parentidcolumn],
+            result.data[filenamecolumn]
+          );
+          successWriter.write(csvRow);
+          count++;
+        } catch (error) {
+          errorCount++;
+          console.log("error!", error);
+          errorWriter.write(error);
+        }
       },
       complete: function () {
-        writer.end();
-        console.log("Processed", count, "rows.");
+        successWriter.end();
+        errorWriter.end();
+        console.log("Processed", count, "rows with ", errorCount, " errors.");
       },
     });
     return;
