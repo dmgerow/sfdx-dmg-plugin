@@ -88,6 +88,7 @@ export default class Base64Decode extends SfdxCommand {
           console.log("Updating target CSV...");
           let csvRow = result.data;
           csvRow[base64column] = join(path, result.data[filenamecolumn]);
+          csvRow["PathOnClient"] = csvRow[base64column];
           successWriter.write(csvRow);
           count++;
         } catch (error) {
