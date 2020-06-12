@@ -3,6 +3,7 @@ import { Messages } from "@salesforce/core";
 import { join } from "path";
 import * as fs from "fs";
 import * as csvWriter from "csv-write-stream";
+import * as fetch from "node-fetch";
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
@@ -28,58 +29,83 @@ export default class GetFromCsv extends SfdxCommand {
     }),
   };
 
+  private count;
+  private errorCount;
+  private successWriter;
+  private errorWriter;
+  private conn;
+
   protected static requiresUsername = true;
 
   public async run(): Promise<any> {
     const filterCritera = this.flags.filter;
     const target = this.flags.target;
-    let count = 0;
-    let errorCount = 0;
-    var successWriter = csvWriter();
-    var errorWriter = csvWriter();
-    successWriter.pipe(
+    this.count = 0;
+    this.errorCount = 0;
+    this.successWriter = csvWriter();
+    this.errorWriter = csvWriter();
+    this.successWriter.pipe(
       fs.createWriteStream(join(target, "success.csv"), { flags: "w" })
     );
-    errorWriter.pipe(
+    this.errorWriter.pipe(
       fs.createWriteStream(join(target, "error.csv"), { flags: "w" })
     );
-    const conn = this.org.getConnection();
-    const results = await conn.query(
+    this.conn = this.org.getConnection();
+    const results = await this.conn.query(
       "SELECT Id, Name, ParentId, Body FROM Attachment WHERE " + filterCritera
     );
+    console.log(results.records.length);
     for (const attachment of results.records) {
       try {
-        console.log("Processing row number: ", count + 1);
-        console.log("Parent ID column: ", attachment["ParentId"]);
-        const path = join(target, "attachments", attachment["ParentId"]);
+        console.log(
+          "Processing row number: ",
+          this.count + 1,
+          "of ",
+          results.totalSize
+        );
+        console.log("ID column: ", attachment["Id"]);
+        const path = join(target, "attachments", attachment["Id"]);
         console.log("Desired destination path: ", path);
         fs.mkdirSync(path, { recursive: true });
+        await this.getFile(path, attachment);
         let csvRow = attachment;
         csvRow["Body"] = path;
         csvRow["PathOnClient"] = path;
-        successWriter.write(csvRow);
-        count++;
-        await this.getFile(conn, path, attachment);
+        this.successWriter.write(csvRow);
+        this.count++;
       } catch (error) {
-        errorCount++;
+        this.errorCount++;
         console.error(error);
-        errorWriter.write(error);
+        this.errorWriter.write(error);
       }
     }
-    successWriter.end();
-    errorWriter.end();
-    console.log("Processed", count, "rows with ", errorCount, " errors.");
+    this.successWriter.end();
+    this.errorWriter.end();
+    console.log(
+      "Processed",
+      this.count,
+      "rows with ",
+      this.errorCount,
+      " errors."
+    );
     return;
   }
 
-  private async getFile(conn, path, attachment) {
-    let fileOut = fs.createWriteStream(path);
-    return new Promise((resolve) => {
-      conn
-        .sobject("Attachment")
-        .record(attachment["Id"])
-        .blob("Body")
-        .pipe(fileOut);
-    });
+  // private async getRecords(conn, path, attachment) {
+  //   return;
+  // }
+
+  private async getFile(path, attachment) {
+    console.log("getting file");
+    let fileName = join(path, attachment["Name"]);
+    console.log(fileName);
+    await fetch(`${this.conn.instanceUrl}${attachment["Body"]}`, {
+      headers: { Authorization: `Bearer ${this.conn.accessToken}` },
+    }).then((image) =>
+      image.body
+        .pipe(fs.createWriteStream(fileName))
+        .on("close", () => console.log("downloaded"))
+    );
+    return;
   }
 }
