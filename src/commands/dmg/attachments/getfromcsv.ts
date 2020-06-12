@@ -51,17 +51,32 @@ export default class GetFromCsv extends SfdxCommand {
       fs.createWriteStream(join(target, "error.csv"), { flags: "w" })
     );
     this.conn = this.org.getConnection();
-    const results = await this.conn.query(
-      "SELECT Id, Name, ParentId, Body FROM Attachment WHERE " + filterCritera
-    );
-    console.log(results.records.length);
-    for (const attachment of results.records) {
+    // const results = await this.conn.query(
+    //   "SELECT Id, Name, ParentId, Body FROM Attachment WHERE " + filterCritera
+    // );
+    let records = [];
+    let query = await this.conn
+      .query(
+        "SELECT Id, Name, ParentId, Body FROM Attachment WHERE " + filterCritera
+      )
+      .on("record", function (record) {
+        records.push(record);
+      })
+      .on("end", function () {
+        console.log("total in database : " + query.totalSize);
+        console.log("total fetched : " + query.totalFetched);
+      })
+      .on("error", function (err) {
+        console.error(err);
+      })
+      .run({ autoFetch: true, maxFetch: 10000 });
+    for (const attachment of records) {
       try {
         console.log(
           "Processing row number: ",
           this.count + 1,
           "of ",
-          results.totalSize
+          query.totalSize
         );
         console.log("ID column: ", attachment["Id"]);
         const path = join(target, "attachments", attachment["Id"]);
