@@ -38,6 +38,7 @@ export default class GetFromCsv extends SfdxCommand {
   protected static requiresUsername = true;
 
   public async run(): Promise<any> {
+    let startTime = Number(new Date());
     const filterCritera = this.flags.filter;
     const target = this.flags.target;
     this.count = 0;
@@ -51,9 +52,6 @@ export default class GetFromCsv extends SfdxCommand {
       fs.createWriteStream(join(target, "error.csv"), { flags: "w" })
     );
     this.conn = this.org.getConnection();
-    // const results = await this.conn.query(
-    //   "SELECT Id, Name, ParentId, Body FROM Attachment WHERE " + filterCritera
-    // );
     let records = [];
     let query = await this.conn
       .query(
@@ -69,7 +67,7 @@ export default class GetFromCsv extends SfdxCommand {
       .on("error", function (err) {
         console.error(err);
       })
-      .run({ autoFetch: true, maxFetch: 10000 });
+      .run({ autoFetch: true, maxFetch: 500000 });
     for (const attachment of records) {
       try {
         console.log(
@@ -77,6 +75,10 @@ export default class GetFromCsv extends SfdxCommand {
           this.count + 1,
           "of ",
           query.totalSize
+        );
+        console.log(
+          "Elapsed time:",
+          (Number(new Date()) - startTime) / 1000 / 60
         );
         console.log("ID column: ", attachment["Id"]);
         const path = join(target, "attachments", attachment["Id"]);
@@ -99,10 +101,14 @@ export default class GetFromCsv extends SfdxCommand {
     console.log(
       "Processed",
       this.count,
-      "rows with ",
+      "rows with",
       this.errorCount,
-      " errors."
+      "errors."
     );
+    let endTime = Number(new Date());
+    console.log("Start time:", new Date(startTime));
+    console.log("End time:", new Date(endTime));
+    console.log("Total time (minutes):", (endTime - startTime) / 1000 / 60);
     return;
   }
 
