@@ -81,15 +81,15 @@ export default class GetFromCsv extends SfdxCommand {
           "Elapsed time:",
           (Number(new Date()) - startTime) / 1000 / 60
         );
-        console.log("Record Processing Rate:", (this.count + 1) / (elapsedTime / 60));
+        console.log(
+          "Record Processing Rate:",
+          (this.count + 1) / (elapsedTime / 60)
+        );
         console.log("ID column: ", attachment["Id"]);
         const path = join(target, "attachments", attachment["Id"]);
         console.log("Desired destination path: ", path);
         fs.mkdirSync(path, { recursive: true });
-        await this.getFile(path, attachment);
-        let csvRow = attachment;
-        csvRow["Body"] = path;
-        csvRow["PathOnClient"] = path;
+        let csvRow = await this.getFile(path, attachment);
         this.successWriter.write(csvRow);
         this.count++;
       } catch (error) {
@@ -114,13 +114,10 @@ export default class GetFromCsv extends SfdxCommand {
     return;
   }
 
-  // private async getRecords(conn, path, attachment) {
-  //   return;
-  // }
-
   private async getFile(path, attachment) {
     console.log("getting file");
-    let fileName = join(path, attachment["Name"]);
+    let attachmentName = attachment["Name"].replace(/[/\\?%*:|"<>]/g, "-");
+    let fileName = join(path, attachmentName);
     console.log(fileName);
     await fetch(`${this.conn.instanceUrl}${attachment["Body"]}`, {
       headers: { Authorization: `Bearer ${this.conn.accessToken}` },
@@ -129,6 +126,9 @@ export default class GetFromCsv extends SfdxCommand {
         .pipe(fs.createWriteStream(fileName))
         .on("close", () => console.log("downloaded"))
     );
-    return;
+    let csvRow = attachment;
+    csvRow["Body"] = fileName;
+    csvRow["PathOnClient"] = fileName;
+    return attachment;
   }
 }
