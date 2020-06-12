@@ -70,6 +70,7 @@ export default class GetFromCsv extends SfdxCommand {
       .run({ autoFetch: true, maxFetch: 500000 });
     for (const attachment of records) {
       try {
+        let elapsedTime = (Number(new Date()) - startTime) / 1000 / 60;
         console.log(
           "Processing row number: ",
           this.count + 1,
@@ -80,6 +81,7 @@ export default class GetFromCsv extends SfdxCommand {
           "Elapsed time:",
           (Number(new Date()) - startTime) / 1000 / 60
         );
+        console.log("Record Processing Rate:", (this.count + 1) / (elapsedTime / 60));
         console.log("ID column: ", attachment["Id"]);
         const path = join(target, "attachments", attachment["Id"]);
         console.log("Desired destination path: ", path);
