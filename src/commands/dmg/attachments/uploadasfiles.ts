@@ -4,7 +4,6 @@ import { join } from "path";
 import * as fs from "fs";
 import * as csvWriter from "csv-write-stream";
 import * as Papa from "papaparse";
-import * as "node-fetch";
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
@@ -13,7 +12,7 @@ Messages.importMessagesDirectory(__dirname);
 // or any library that is using the messages framework can also be loaded this way.
 const messages = Messages.loadMessages("sfdx-dmg-plugin", "files");
 
-export default class GetFromCsv extends SfdxCommand {
+export default class UploadAsFiles extends SfdxCommand {
   public static description = messages.getMessage("base64decode.description");
   public static examples = [];
 
@@ -48,10 +47,10 @@ export default class GetFromCsv extends SfdxCommand {
     this.successWriter = csvWriter();
     this.errorWriter = csvWriter();
     this.successWriter.pipe(
-      fs.createWriteStream(join(target, "success.csv"), { flags: "w" })
+      fs.createWriteStream(join(target, "success_files.csv"), { flags: "w" })
     );
     this.errorWriter.pipe(
-      fs.createWriteStream(join(target, "error.csv"), { flags: "w" })
+      fs.createWriteStream(join(target, "error_files.csv"), { flags: "w" })
     );
     this.conn = this.org.getConnection();
     let orgInfo = await this.conn.query("SELECT Id, Name FROM Organization");
@@ -78,7 +77,7 @@ export default class GetFromCsv extends SfdxCommand {
         const path = join(target, "attachments", attachment["Id"]);
         console.log("Desired destination path: ", path);
         fs.mkdirSync(path, { recursive: true });
-        let csvRow = await this.getFile(path, attachment);
+        let csvRow = await this.uploadFile(path, attachment);
         this.successWriter.write(csvRow);
         this.count++;
       } catch (error) {
@@ -123,23 +122,33 @@ export default class GetFromCsv extends SfdxCommand {
     });
   }
 
-  private async getFile(path, attachment) {
-    console.log("getting file");
+  private async uploadFile(path, attachment) {
+    console.log("uploading file");
     let fileName = join(path, attachment["Name"]);
     console.log(fileName);
     let uri =
-      "/services/data/v" +
-      this.conn.version +
-      "/sobjects/Attachment/" +
-      attachment["Id"] +
-      "/Body";
+      "/services/data/v" + this.conn.version + "/sobjects/ContentVersion";
     console.log(uri);
-    await this.conn.requestGet(uri).then((response) => {
-      fs.writeFileSync(fileName, response);
+    const fileContents = fs.readFileSync(attachment["PathOnClient"], {
+      encoding: "base64",
     });
+    let requestBody = {
+      Title: attachment["Name"],
+      PathOnClient: attachment["Name"],
+      VersionData: fileContents,
+      FirstPublishLocationId: attachment["ParentId"],
+    };
     let csvRow = attachment;
-    csvRow["Body"] = fileName;
-    csvRow["PathOnClient"] = fileName;
+    csvRow["VersionId"] = "";
+    csvRow["Errors"] = "";
+    await this.conn.requestPost(uri, requestBody).then((response) => {
+      console.log(response);
+      if (response["success"]) {
+        csvRow["VersionId"] = response["id"];
+      } else {
+        csvRow["Errors"] = JSON.stringify(response["errors"]);
+      }
+    });
     return csvRow;
   }
 }
