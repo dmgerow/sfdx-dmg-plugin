@@ -4,6 +4,7 @@ import { join } from "path";
 import * as fs from "fs";
 import * as csvWriter from "csv-write-stream";
 import * as Papa from "papaparse";
+import * as fetch from "node-fetch";
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
@@ -54,7 +55,6 @@ export default class UploadAsFiles extends SfdxCommand {
       fs.createWriteStream(join(target, "error_files.csv"), { flags: "w" })
     );
     this.conn = this.org.getConnection();
-    await this.refreshSession();
     let records = await (<any>this.getCsv(sourceFile));
     for (const attachment of records) {
       try {
@@ -124,11 +124,15 @@ export default class UploadAsFiles extends SfdxCommand {
 
   private async uploadFile(path, attachment) {
     console.log("uploading file");
+    await this.refreshSession();
     let fileName = join(path, attachment["Name"]);
     console.log(fileName);
-    let uri =
-      "/services/data/v" + this.conn.version + "/sobjects/ContentVersion";
-    console.log(uri);
+    let url =
+      this.conn.instanceUrl +
+      "/services/data/v" +
+      this.conn.version +
+      "/sobjects/ContentVersion";
+    console.log(url);
     const fileContents = fs.readFileSync(attachment["PathOnClient"], {
       encoding: "base64",
     });
@@ -141,13 +145,20 @@ export default class UploadAsFiles extends SfdxCommand {
     let csvRow = attachment;
     csvRow["VersionId"] = "";
     csvRow["Errors"] = "";
-    await this.conn.requestPost(uri, requestBody).then((response) => {
+    await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.conn.accessToken}`,
+      },
+      body: requestBody,
+    }).then((response) => {
       console.log(response);
       if (response["success"]) {
         csvRow["VersionId"] = response["id"];
       } else {
         csvRow["Errors"] = JSON.stringify(response["errors"]);
       }
+      console.log("File Uploaded");
     });
     return csvRow;
   }

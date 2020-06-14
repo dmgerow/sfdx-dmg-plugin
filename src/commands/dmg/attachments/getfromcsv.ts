@@ -55,7 +55,6 @@ export default class GetFromCsv extends SfdxCommand {
       fs.createWriteStream(join(target, "error.csv"), { flags: "w" })
     );
     this.conn = this.org.getConnection();
-    await this.refreshSession();
     let records = await (<any>this.getCsv(sourceFile));
     for (const attachment of records) {
       try {
@@ -125,18 +124,24 @@ export default class GetFromCsv extends SfdxCommand {
 
   private async getFile(path, attachment) {
     console.log("getting file");
+    await this.refreshSession();
     let fileName = join(path, attachment["Name"]);
     console.log(fileName);
-    let uri =
+    let url =
+      this.conn.instanceUrl +
       "/services/data/v" +
       this.conn.version +
       "/sobjects/Attachment/" +
       attachment["Id"] +
       "/Body";
-    console.log(uri);
-    await this.conn.requestGet(uri).then((response) => {
-      fs.writeFileSync(fileName, response);
-    });
+    console.log(url);
+    await fetch(url, {
+      headers: { Authorization: `Bearer ${this.conn.accessToken}` },
+    }).then((response) =>
+      response.body
+        .pipe(fs.createWriteStream(fileName))
+        .on("close", () => console.log("downloaded"))
+    );
     let csvRow = attachment;
     csvRow["Body"] = fileName;
     csvRow["PathOnClient"] = fileName;
