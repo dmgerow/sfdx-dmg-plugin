@@ -127,11 +127,11 @@ export default class GetFromCsv extends SfdxCommand {
     console.log(fileName);
     let url =
       this.conn.instanceUrl +
-      "/services/data/" +
+      "/services/data/v" +
       this.conn.version +
       "/sobjects/Attachment/" +
       attachment["Id"] +
-      "/body";
+      "/Body";
     console.log(url);
     await fetch(url, {
       headers: { Authorization: `Bearer ${this.conn.accessToken}` },
