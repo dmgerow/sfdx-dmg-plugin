@@ -125,14 +125,15 @@ export default class GetFromCsv extends SfdxCommand {
     console.log("getting file");
     let fileName = join(path, attachment["Name"]);
     console.log(fileName);
-    let uri =
+    let url =
       this.conn.instanceUrl +
       "/services/data/" +
       this.conn.version +
       "/sobjects/Attachment/" +
       attachment["Id"] +
       "/body";
-    await fetch(uri, {
+    console.log(url);
+    await fetch(url, {
       headers: { Authorization: `Bearer ${this.conn.accessToken}` },
     }).then((image) =>
       image.body
