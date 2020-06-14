@@ -44,6 +44,7 @@ export default class GetFromCsv extends SfdxCommand {
     const target = this.flags.target;
     this.count = 0;
     this.errorCount = 0;
+    fs.mkdirSync(target, { recursive: true });
     this.successWriter = csvWriter();
     this.errorWriter = csvWriter();
     this.successWriter.pipe(
@@ -141,6 +142,6 @@ export default class GetFromCsv extends SfdxCommand {
     let csvRow = attachment;
     csvRow["Body"] = fileName;
     csvRow["PathOnClient"] = fileName;
-    return attachment;
+    return csvRow;
   }
 }
