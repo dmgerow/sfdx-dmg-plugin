@@ -3,7 +3,6 @@ import { Messages } from "@salesforce/core";
 import { join } from "path";
 import * as fs from "fs";
 import * as csvWriter from "csv-write-stream";
-import * as fetch from "node-fetch";
 import * as Papa from "papaparse";
 
 // Initialize Messages with the current plugin directory
@@ -127,21 +126,16 @@ export default class GetFromCsv extends SfdxCommand {
     console.log("getting file");
     let fileName = join(path, attachment["Name"]);
     console.log(fileName);
-    let url =
-      this.conn.instanceUrl +
+    let uri =
       "/services/data/v" +
       this.conn.version +
       "/sobjects/Attachment/" +
       attachment["Id"] +
       "/Body";
-    console.log(url);
-    await fetch(url, {
-      headers: { Authorization: `Bearer ${this.conn.accessToken}` },
-    }).then((image) =>
-      image.body
-        .pipe(fs.createWriteStream(fileName))
-        .on("close", () => console.log("downloaded"))
-    );
+    console.log(uri);
+    await this.conn.requestGet(uri).then((response) => {
+      fs.writeFileSync(fileName, response);
+    });
     let csvRow = attachment;
     csvRow["Body"] = fileName;
     csvRow["PathOnClient"] = fileName;
