@@ -54,6 +54,8 @@ export default class GetFromCsv extends SfdxCommand {
       fs.createWriteStream(join(target, "error.csv"), { flags: "w" })
     );
     this.conn = this.org.getConnection();
+    let orgInfo = await this.conn.query("SELECT Id, Name FROM Organization");
+    console.log(orgInfo.records);
     let records = await (<any>this.getCsv(sourceFile));
     for (const attachment of records) {
       try {
