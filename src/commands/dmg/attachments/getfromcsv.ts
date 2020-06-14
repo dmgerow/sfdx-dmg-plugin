@@ -4,6 +4,7 @@ import { join } from "path";
 import * as fs from "fs";
 import * as csvWriter from "csv-write-stream";
 import * as fetch from "node-fetch";
+import * as Papa from "papaparse";
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
@@ -17,9 +18,9 @@ export default class GetFromCsv extends SfdxCommand {
   public static examples = [];
 
   public static readonly flagsConfig = {
-    filter: flags.string({
-      char: "q",
-      description: "filter criteria",
+    source: flags.string({
+      char: "s",
+      description: messages.getMessage("base64decode.flags.source"),
       required: true,
     }),
     target: flags.string({
@@ -39,7 +40,7 @@ export default class GetFromCsv extends SfdxCommand {
 
   public async run(): Promise<any> {
     let startTime = Number(new Date());
-    const filterCritera = this.flags.filter;
+    const sourceFile = fs.createReadStream(this.flags.source);
     const target = this.flags.target;
     this.count = 0;
     this.errorCount = 0;
@@ -52,22 +53,7 @@ export default class GetFromCsv extends SfdxCommand {
       fs.createWriteStream(join(target, "error.csv"), { flags: "w" })
     );
     this.conn = this.org.getConnection();
-    let records = [];
-    let query = await this.conn
-      .query(
-        "SELECT Id, Name, ParentId, Body FROM Attachment WHERE " + filterCritera
-      )
-      .on("record", function (record) {
-        records.push(record);
-      })
-      .on("end", function () {
-        console.log("total in database : " + query.totalSize);
-        console.log("total fetched : " + query.totalFetched);
-      })
-      .on("error", function (err) {
-        console.error(err);
-      })
-      .run({ autoFetch: true, maxFetch: 500000 });
+    let records = await (<any>this.getCsv(sourceFile));
     for (const attachment of records) {
       try {
         let elapsedTime = (Number(new Date()) - startTime) / 1000 / 60;
@@ -75,7 +61,7 @@ export default class GetFromCsv extends SfdxCommand {
           "Processing row number: ",
           this.count + 1,
           "of ",
-          query.totalSize
+          records.length
         );
         console.log(
           "Elapsed time:",
@@ -114,12 +100,38 @@ export default class GetFromCsv extends SfdxCommand {
     return;
   }
 
+  private async getCsv(sourceFile) {
+    return new Promise((resolve) => {
+      Papa.parse(sourceFile, {
+        header: true,
+        transformHeader: function (header) {
+          return header.trim();
+        },
+        transform: function (value, header) {
+          if (header.toLowerCase() === "name") {
+            return value.replace(/[/\\?%*:|"<>]/g, "-");
+          }
+          return value;
+        },
+        complete: function (results) {
+          resolve(results.data);
+        },
+      });
+    });
+  }
+
   private async getFile(path, attachment) {
     console.log("getting file");
-    let attachmentName = attachment["Name"].replace(/[/\\?%*:|"<>]/g, "-");
-    let fileName = join(path, attachmentName);
+    let fileName = join(path, attachment["Name"]);
     console.log(fileName);
-    await fetch(`${this.conn.instanceUrl}${attachment["Body"]}`, {
+    let uri =
+      this.conn.instanceUrl +
+      "/services/data/" +
+      this.conn.version +
+      "/sobjects/Attachment/" +
+      attachment["Id"] +
+      "/body";
+    await fetch(uri, {
       headers: { Authorization: `Bearer ${this.conn.accessToken}` },
     }).then((image) =>
       image.body
