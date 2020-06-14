@@ -4,7 +4,7 @@ import { join } from "path";
 import * as fs from "fs";
 import * as csvWriter from "csv-write-stream";
 import * as Papa from "papaparse";
-import * as "node-fetch";
+import * as fetch from "node-fetch";
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
@@ -35,6 +35,7 @@ export default class GetFromCsv extends SfdxCommand {
   private successWriter;
   private errorWriter;
   private conn;
+  private hourSessionRefreshed;
 
   protected static requiresUsername = true;
 
@@ -54,8 +55,7 @@ export default class GetFromCsv extends SfdxCommand {
       fs.createWriteStream(join(target, "error.csv"), { flags: "w" })
     );
     this.conn = this.org.getConnection();
-    let orgInfo = await this.conn.query("SELECT Id, Name FROM Organization");
-    console.log(orgInfo.records);
+    await this.refreshSession();
     let records = await (<any>this.getCsv(sourceFile));
     for (const attachment of records) {
       try {
@@ -141,5 +141,16 @@ export default class GetFromCsv extends SfdxCommand {
     csvRow["Body"] = fileName;
     csvRow["PathOnClient"] = fileName;
     return csvRow;
+  }
+
+  private async refreshSession() {
+    let currentHour = new Date().getHours();
+    if (this.hourSessionRefreshed != currentHour) {
+      console.log("Refreshing session since the hour has changed");
+      let orgInfo = await this.conn.query("SELECT Id, Name FROM Organization");
+      console.log(orgInfo.records);
+      this.hourSessionRefreshed = currentHour;
+    }
+    return;
   }
 }

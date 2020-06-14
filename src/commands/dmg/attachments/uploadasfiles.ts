@@ -34,6 +34,7 @@ export default class UploadAsFiles extends SfdxCommand {
   private successWriter;
   private errorWriter;
   private conn;
+  private hourSessionRefreshed;
 
   protected static requiresUsername = true;
 
@@ -53,8 +54,7 @@ export default class UploadAsFiles extends SfdxCommand {
       fs.createWriteStream(join(target, "error_files.csv"), { flags: "w" })
     );
     this.conn = this.org.getConnection();
-    let orgInfo = await this.conn.query("SELECT Id, Name FROM Organization");
-    console.log(orgInfo.records);
+    await this.refreshSession();
     let records = await (<any>this.getCsv(sourceFile));
     for (const attachment of records) {
       try {
@@ -150,5 +150,16 @@ export default class UploadAsFiles extends SfdxCommand {
       }
     });
     return csvRow;
+  }
+
+  private async refreshSession() {
+    let currentHour = new Date().getHours();
+    if (this.hourSessionRefreshed != currentHour) {
+      console.log("Refreshing session since the hour has changed");
+      let orgInfo = await this.conn.query("SELECT Id, Name FROM Organization");
+      console.log(orgInfo.records);
+      this.hourSessionRefreshed = currentHour;
+    }
+    return;
   }
 }
