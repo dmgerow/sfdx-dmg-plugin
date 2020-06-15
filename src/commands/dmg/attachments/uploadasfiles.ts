@@ -75,11 +75,11 @@ export default class UploadAsFiles extends SfdxCommand {
         );
         console.log("ID column: ", attachment["Id"]);
         const path = join(target, "attachments", attachment["Id"]);
-        console.log("Desired destination path: ", path);
         fs.mkdirSync(path, { recursive: true });
         let csvRow = await this.uploadFile(path, attachment);
         this.successWriter.write(csvRow);
         this.count++;
+        console.log("===========================================");
       } catch (error) {
         this.errorCount++;
         console.error(error);
@@ -123,7 +123,6 @@ export default class UploadAsFiles extends SfdxCommand {
   }
 
   private async uploadFile(path, attachment) {
-    console.log("uploading file");
     await this.refreshSession();
     let fileName = join(path, attachment["Name"]);
     console.log(fileName);
@@ -149,17 +148,22 @@ export default class UploadAsFiles extends SfdxCommand {
       method: "POST",
       headers: {
         Authorization: `Bearer ${this.conn.accessToken}`,
+        "Content-Type": "application/json",
       },
-      body: requestBody,
-    }).then((response) => {
-      console.log(response);
-      if (response["success"]) {
-        csvRow["VersionId"] = response["id"];
-      } else {
-        csvRow["Errors"] = JSON.stringify(response["errors"]);
-      }
-      console.log("File Uploaded");
-    });
+      body: JSON.stringify(requestBody),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+        if (response["success"]) {
+          csvRow["VersionId"] = response["id"];
+        } else {
+          csvRow["Errors"] = JSON.stringify(response["errors"]);
+        }
+        console.log("File Uploaded");
+      });
     return csvRow;
   }
 
