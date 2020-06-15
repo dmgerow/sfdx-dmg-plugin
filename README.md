@@ -50,7 +50,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/attachments/getfromcsv.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/attachments/getfromcsv.ts)_
+_See code: [src/commands/dmg/attachments/getfromcsv.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.1/src/commands/dmg/attachments/getfromcsv.ts)_
 
 ## `sfdx dmg:attachments:uploadasfiles -s <string> -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -77,7 +77,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/attachments/uploadasfiles.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/attachments/uploadasfiles.ts)_
+_See code: [src/commands/dmg/attachments/uploadasfiles.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.1/src/commands/dmg/attachments/uploadasfiles.ts)_
 
 ## `sfdx dmg:connectedapp:create -n <string> [-l <string>] [-r] [-c <string>] [-d <string>] [-s <string>] [-e <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -125,7 +125,7 @@ OPTIONS
       [default: warn] logging level for this command invocation
 ```
 
-_See code: [src/commands/dmg/connectedapp/create.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/connectedapp/create.ts)_
+_See code: [src/commands/dmg/connectedapp/create.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.1/src/commands/dmg/connectedapp/create.ts)_
 
 ## `sfdx dmg:files:base64decode -s <string> -t <string> -c <string> -f <string> -p <string> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -157,7 +157,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/files/base64decode.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/files/base64decode.ts)_
+_See code: [src/commands/dmg/files/base64decode.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.1/src/commands/dmg/files/base64decode.ts)_
 
 ## `sfdx dmg:knowledge:convert -s <string> -t <string> [-h <string>] [-f <string>] [-c <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -185,7 +185,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/knowledge/convert.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/knowledge/convert.ts)_
+_See code: [src/commands/dmg/knowledge/convert.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.1/src/commands/dmg/knowledge/convert.ts)_
 
 ## `sfdx dmg:source:cleanup [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -202,7 +202,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/source/cleanup.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/source/cleanup.ts)_
+_See code: [src/commands/dmg/source/cleanup.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.1/src/commands/dmg/source/cleanup.ts)_
 
 ## `sfdx dmg:source:retrieve -x <string> [-n] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -237,7 +237,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/source/retrieve.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/source/retrieve.ts)_
+_See code: [src/commands/dmg/source/retrieve.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.1/src/commands/dmg/source/retrieve.ts)_
 
 ## `sfdx dmg:workbench:open [-s <string> -t <string>] [-r <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -265,5 +265,5 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/workbench/open.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/workbench/open.ts)_
+_See code: [src/commands/dmg/workbench/open.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.1/src/commands/dmg/workbench/open.ts)_
 <!-- commandsstop -->
