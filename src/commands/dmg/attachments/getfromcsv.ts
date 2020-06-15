@@ -85,6 +85,7 @@ export default class GetFromCsv extends SfdxCommand {
         console.error(error);
         this.errorWriter.write(error);
       }
+      console.log("===========================================");
     }
     this.successWriter.end();
     this.errorWriter.end();

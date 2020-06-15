@@ -79,12 +79,12 @@ export default class UploadAsFiles extends SfdxCommand {
         let csvRow = await this.uploadFile(path, attachment);
         this.successWriter.write(csvRow);
         this.count++;
-        console.log("===========================================");
       } catch (error) {
         this.errorCount++;
         console.error(error);
         this.errorWriter.write(error);
       }
+      console.log("===========================================");
     }
     this.successWriter.end();
     this.errorWriter.end();
