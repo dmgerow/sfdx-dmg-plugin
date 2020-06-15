@@ -125,13 +125,13 @@ export default class UploadAsFiles extends SfdxCommand {
   private async uploadFile(path, attachment) {
     await this.refreshSession();
     let fileName = join(path, attachment["Name"]);
-    console.log(fileName);
+    console.log("File name:", fileName);
     let url =
       this.conn.instanceUrl +
       "/services/data/v" +
       this.conn.version +
       "/sobjects/ContentVersion";
-    console.log(url);
+    console.log("URL:", url);
     const fileContents = fs.readFileSync(attachment["PathOnClient"], {
       encoding: "base64",
     });
@@ -157,7 +157,7 @@ export default class UploadAsFiles extends SfdxCommand {
         return response.json();
       })
       .then((response) => {
-        console.log(response);
+        console.log("Upload response:", response);
         if (response["success"]) {
           csvRow["VersionId"] = response["id"];
         } else {
