@@ -144,7 +144,9 @@ export default class UploadAsFiles extends SfdxCommand {
     };
     let csvRow = attachment;
     csvRow["VersionId"] = "";
-    csvRow["Errors"] = "";
+    csvRow["Response"] = "";
+    csvRow["Error Code"] = "";
+    csvRow["Error Message"] = "";
     await fetch(url, {
       method: "POST",
       headers: {
@@ -158,10 +160,12 @@ export default class UploadAsFiles extends SfdxCommand {
       })
       .then((response) => {
         console.log("Upload response:", response);
+        csvRow["Response"] = JSON.stringify(response);
         if (response["success"]) {
           csvRow["VersionId"] = response["id"];
         } else {
-          csvRow["Errors"] = JSON.stringify(response["errors"]);
+          csvRow["Error Code"] = response[0]["errorCode"];
+          csvRow["Error Message"] = response[0]["message"];
         }
         console.log("File Uploaded");
       });
