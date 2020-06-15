@@ -5,5 +5,12 @@
       "source": "source file relative path",
       "target": "target file relative path"
     }
+  },
+  "uploadasfiles": {
+    "description": "uploads attachments retrieved using the getfromcsv command as Salesforce files and relates them to the parent record",
+    "flags": {
+      "source": "source file relative path",
+      "target": "target file relative path"
+    }
   }
 }
