@@ -1,0 +1,9 @@
+{
+  "getfromcsv": {
+    "description": "get attachment binaries from Salesforce based on a CSV that contains the attachment metadata",
+    "flags": {
+      "source": "source file relative path",
+      "target": "target file relative path"
+    }
+  }
+}

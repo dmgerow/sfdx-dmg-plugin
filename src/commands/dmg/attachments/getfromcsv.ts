@@ -11,21 +11,21 @@ Messages.importMessagesDirectory(__dirname);
 
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
 // or any library that is using the messages framework can also be loaded this way.
-const messages = Messages.loadMessages("sfdx-dmg-plugin", "files");
+const messages = Messages.loadMessages("sfdx-dmg-plugin", "attachments");
 
 export default class GetFromCsv extends SfdxCommand {
-  public static description = messages.getMessage("base64decode.description");
+  public static description = messages.getMessage("getfromcsv.description");
   public static examples = [];
 
   public static readonly flagsConfig = {
     source: flags.string({
       char: "s",
-      description: messages.getMessage("base64decode.flags.source"),
+      description: messages.getMessage("getfromcsv.flags.source"),
       required: true,
     }),
     target: flags.string({
       char: "t",
-      description: messages.getMessage("base64decode.flags.target"),
+      description: messages.getMessage("getfromcsv.flags.target"),
       required: true,
     }),
   };
