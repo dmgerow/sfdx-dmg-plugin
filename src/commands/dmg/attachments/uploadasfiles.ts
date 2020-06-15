@@ -132,7 +132,7 @@ export default class UploadAsFiles extends SfdxCommand {
       this.conn.version +
       "/sobjects/ContentVersion";
     console.log("URL:", url);
-    const fileContents = fs.readFileSync(attachment["PathOnClient"], {
+    const fileContents = fs.readFileSync(fileName, {
       encoding: "base64",
     });
     let requestBody = {
