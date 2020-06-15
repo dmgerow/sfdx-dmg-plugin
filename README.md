@@ -16,12 +16,68 @@ sfdx plugins:install sfdx-dmg-plugin
 <!-- usagestop -->
 # Usage
 <!-- commands -->
+* [`sfdx dmg:attachments:getfromcsv -s <string> -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-dmgattachmentsgetfromcsv--s-string--t-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+* [`sfdx dmg:attachments:uploadasfiles -s <string> -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-dmgattachmentsuploadasfiles--s-string--t-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx dmg:connectedapp:create -n <string> [-l <string>] [-r] [-c <string>] [-d <string>] [-s <string>] [-e <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-dmgconnectedappcreate--n-string--l-string--r--c-string--d-string--s-string--e-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx dmg:files:base64decode -s <string> -t <string> -c <string> -f <string> -p <string> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-dmgfilesbase64decode--s-string--t-string--c-string--f-string--p-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx dmg:knowledge:convert -s <string> -t <string> [-h <string>] [-f <string>] [-c <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-dmgknowledgeconvert--s-string--t-string--h-string--f-string--c-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx dmg:source:cleanup [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-dmgsourcecleanup---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx dmg:source:retrieve -x <string> [-n] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-dmgsourceretrieve--x-string--n--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx dmg:workbench:open [-s <string> -t <string>] [-r <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-dmgworkbenchopen--s-string--t-string--r-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+
+## `sfdx dmg:attachments:getfromcsv -s <string> -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+get attachment binaries from Salesforce based on a CSV that contains the attachment metadata
+
+```
+USAGE
+  $ sfdx dmg:attachments:getfromcsv -s <string> -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+OPTIONS
+  -s, --source=source                                                               (required) source file relative path
+  -t, --target=target                                                               (required) target file relative path
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+```
+
+_See code: [src/commands/dmg/attachments/getfromcsv.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/attachments/getfromcsv.ts)_
+
+## `sfdx dmg:attachments:uploadasfiles -s <string> -t <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+uploads attachments retrieved using the getfromcsv command as Salesforce files and relates them to the parent record
+
+```
+USAGE
+  $ sfdx dmg:attachments:uploadasfiles -s <string> -t <string> [-u <string>] [--apiversion <string>] [--json] 
+  [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+OPTIONS
+  -s, --source=source                                                               (required) source file relative path
+  -t, --target=target                                                               (required) target file relative path
+
+  -u, --targetusername=targetusername                                               username or alias for the target
+                                                                                    org; overrides default target org
+
+  --apiversion=apiversion                                                           override the api version used for
+                                                                                    api requests made by this command
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+```
+
+_See code: [src/commands/dmg/attachments/uploadasfiles.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/attachments/uploadasfiles.ts)_
 
 ## `sfdx dmg:connectedapp:create -n <string> [-l <string>] [-r] [-c <string>] [-d <string>] [-s <string>] [-e <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -69,7 +125,7 @@ OPTIONS
       [default: warn] logging level for this command invocation
 ```
 
-_See code: [src/commands/dmg/connectedapp/create.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.1.1/src/commands/dmg/connectedapp/create.ts)_
+_See code: [src/commands/dmg/connectedapp/create.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/connectedapp/create.ts)_
 
 ## `sfdx dmg:files:base64decode -s <string> -t <string> -c <string> -f <string> -p <string> [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -101,7 +157,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/files/base64decode.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.1.1/src/commands/dmg/files/base64decode.ts)_
+_See code: [src/commands/dmg/files/base64decode.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/files/base64decode.ts)_
 
 ## `sfdx dmg:knowledge:convert -s <string> -t <string> [-h <string>] [-f <string>] [-c <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -129,7 +185,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/knowledge/convert.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.1.1/src/commands/dmg/knowledge/convert.ts)_
+_See code: [src/commands/dmg/knowledge/convert.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/knowledge/convert.ts)_
 
 ## `sfdx dmg:source:cleanup [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -146,7 +202,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/source/cleanup.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.1.1/src/commands/dmg/source/cleanup.ts)_
+_See code: [src/commands/dmg/source/cleanup.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/source/cleanup.ts)_
 
 ## `sfdx dmg:source:retrieve -x <string> [-n] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -181,7 +237,7 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/source/retrieve.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.1.1/src/commands/dmg/source/retrieve.ts)_
+_See code: [src/commands/dmg/source/retrieve.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/source/retrieve.ts)_
 
 ## `sfdx dmg:workbench:open [-s <string> -t <string>] [-r <string>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -209,5 +265,5 @@ OPTIONS
                                                                                     this command invocation
 ```
 
-_See code: [src/commands/dmg/workbench/open.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.1.1/src/commands/dmg/workbench/open.ts)_
+_See code: [src/commands/dmg/workbench/open.ts](https://github.com/dmgerow/sfdx-dmg-plugin/blob/v0.2.0/src/commands/dmg/workbench/open.ts)_
 <!-- commandsstop -->
