@@ -140,6 +140,10 @@ export default class UploadAsFiles extends SfdxCommand {
       PathOnClient: attachment["Name"],
       VersionData: fileContents,
       FirstPublishLocationId: attachment["ParentId"],
+      CreatedById: attachment["CreatedById"],
+      CreatedDate: attachment["CreatedDate"],
+      LastModifiedById: attachment["LastModifiedById"],
+      LastModifiedDate: attachment["LastModifiedDate"],
       AttachmentId__c: attachment["Id"],
     };
     let csvRow = attachment;
