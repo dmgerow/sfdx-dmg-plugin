@@ -136,16 +136,21 @@ export default class GetFromCsv extends SfdxCommand {
       attachment["Id"] +
       "/Body";
     console.log(url);
-    await fetch(url, {
-      headers: { Authorization: `Bearer ${this.conn.accessToken}` },
-    }).then((response) =>
-      response.body
-        .pipe(fs.createWriteStream(fileName))
-        .on("close", () => console.log("downloaded"))
-    );
     let csvRow = attachment;
     csvRow["Body"] = fileName;
     csvRow["PathOnClient"] = fileName;
+    csvRow["Response Status"] = "";
+    csvRow["Response Status Text"] = "";
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${this.conn.accessToken}` },
+    });
+    console.log(response.status, response.statusText);
+    csvRow["Response Status"] = response.status;
+    csvRow["Response Status Text"] = response.statusText;
+    if (response.ok) {
+      console.log(`Unexpected response ${response.statusText}`);
+      await this.writeFile(response, fileName);
+    }
     return csvRow;
   }
 
@@ -158,5 +163,14 @@ export default class GetFromCsv extends SfdxCommand {
       this.hourSessionRefreshed = currentHour;
     }
     return;
+  }
+
+  private async writeFile(response, fileName) {
+    return new Promise((resolve) => {
+      response.body.pipe(fs.createWriteStream(fileName)).on("close", () => {
+        console.log("files saved:", fileName);
+        resolve();
+      });
+    });
   }
 }
