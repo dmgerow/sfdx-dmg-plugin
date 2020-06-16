@@ -148,7 +148,6 @@ export default class GetFromCsv extends SfdxCommand {
     csvRow["Response Status"] = response.status;
     csvRow["Response Status Text"] = response.statusText;
     if (response.ok) {
-      console.log(`Unexpected response ${response.statusText}`);
       await this.writeFile(response, fileName);
     }
     return csvRow;
