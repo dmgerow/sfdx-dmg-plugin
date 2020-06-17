@@ -144,6 +144,7 @@ export default class UploadAsFiles extends SfdxCommand {
       CreatedDate: attachment["CreatedDate"],
       LastModifiedById: attachment["LastModifiedById"],
       LastModifiedDate: attachment["LastModifiedDate"],
+      Description: attachment["Description"],
       AttachmentId__c: attachment["Id"],
     };
     let csvRow = attachment;
