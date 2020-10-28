@@ -11,7 +11,7 @@
     "@salesforce/core": "^2.1.5",
     "csv-write-stream": "^2.0.0",
     "node-fetch": "^2.6.0",
-    "node-forge": "^0.9.1",
+    "node-forge": "^0.10.0",
     "open": "^7.0.0",
     "papaparse": "^5.1.1",
     "strip-color": "^0.1.0",
